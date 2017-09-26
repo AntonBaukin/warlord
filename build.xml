@@ -1,0 +1,164 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<project name = "WARLord" default = "init-ivy"
+  xmlns:if = "ant:if" xmlns:ivy = 'antlib:org.apache.ivy.ant'>
+
+
+  <!-- ====[ Shared Variables ]==== -->
+
+  <property name  = "version"
+            value = "0.0.1"/>
+
+  <property name  = "archive"
+            value = "warlord.jar"/>
+
+  <property name  = "build-root"
+            value = "${basedir}/build"/>
+
+  <property name  = "target-root"
+            value = "${basedir}/target/"/>
+
+  <property name  = "ivy-cache"
+            value = "${build-root}/.ivy-cache"/>
+
+  <property name  = "libs-compile"
+            value = "${target-root}/.libs-compile"/>
+
+  <property name  = "libs-provided"
+            value = "${target-root}/.libs-provided"/>
+
+  <property name  = "libs-runtime"
+            value = "${target-root}/.libs-runtime"/>
+
+  <property name  = "libs-sources"
+            value = "${target-root}/.libs-sources"/>
+
+
+  <!-- ====[ Compile Variables ]==== -->
+
+  <property name  = "compile.encoding"
+            value = "UTF-8"/>
+
+  <property name  = "compile.version"
+            value = "1.8"/>
+
+  <property name  = "resources.encoding"
+            value = "UTF-8"/>
+
+
+  <!-- ====[ Special Variables ]==== -->
+
+  <condition property = "?debug">
+    <not>
+      <isset property = "release"/>
+    </not>
+  </condition>
+
+
+
+  <!--<mkdir dir = "${ivy-cache}"/>-->
+
+  <!-- ====[ § Dependenvies via Apache Ivy ]==== -->
+
+  <condition property = "?init-ivy-compile">
+    <not>
+      <available type = "dir" file = "${libs-compile}"/>
+    </not>
+  </condition>
+
+  <condition property = "?init-ivy-provided">
+    <not>
+      <available type = "dir" file = "${libs-provided}"/>
+    </not>
+  </condition>
+
+  <condition property = "?init-ivy-runtime">
+    <not>
+      <available type = "dir" file = "${libs-runtime}"/>
+    </not>
+  </condition>
+
+  <condition property = "?init-ivy">
+    <or>
+      <istrue value = "${?init-ivy-compile}"/>
+      <istrue value = "${?init-ivy-provided}"/>
+      <istrue value = "${?init-ivy-runtime}"/>
+    </or>
+  </condition>
+
+
+  <!-- § reinit ivy -->
+
+  <target name = "reinit-ivy">
+
+  </target>
+
+  <!-- § init ivy -->
+
+  <target name = "init-ivy" if = "?init-ivy">
+
+    <mkdir dir = "${libs-sources}"/>
+    <ivy:configure file = "${build-root}/setup.ivy"/>
+
+    <!-- compile -->
+    <ivy:resolve file = "${build-root}/warlord.ivy"
+      conf = "compile" resolveId = "warlord-compile"
+      if:true = "${?init-ivy-compile}"/>
+
+    <ivy:artifactreport tofile = "${libs-sources}/ivy-compile.xml"
+      if:true = "${?init-ivy-compile}"/>
+
+    <ivy:retrieve resolveId = "warlord-compile" type = "jar, bundle"
+      pattern = "${libs-compile}/[artifact]-[revision].[ext]"
+      if:true = "${?init-ivy-compile}"/>
+
+
+    <!-- provided -->
+    <ivy:resolve file = "${build-root}/warlord.ivy"
+      conf = "provided" resolveId = "warlord-provided"
+      if:true = "${?init-ivy-provided}"/>
+
+    <ivy:artifactreport tofile = "${libs-sources}/ivy-provided.xml"
+      if:true = "${?init-ivy-provided}"/>
+
+    <ivy:retrieve resolveId = "warlord-provided" type = "jar, bundle"
+      pattern = "${libs-provided}/[artifact]-[revision].[ext]"
+      if:true = "${?init-ivy-provided}"/>
+    
+
+    <!-- runtime-->
+    <ivy:resolve file = "${build-root}/warlord.ivy"
+      conf = "runtime" resolveId = "warlord-runtime"
+      if:true = "${?init-ivy-runtime}"/>
+
+    <ivy:retrieve resolveId = "warlord-runtime" type = "jar, bundle"
+      pattern = "${libs-runtime}/[artifact]-[revision].[ext]"
+      if:true = "${?init-ivy-runtime}"/>
+
+
+    <!-- sources -->
+
+    <xslt style = "${build-root}/ivy-src.xslt"
+      in  = "${libs-sources}/ivy-compile.xml"
+      out = "${libs-sources}/ivy-compile-sources.xml">
+
+      <param name = "module" type = "STRING" expression = "compile-sources"/>
+    </xslt>
+
+    <ivy:resolve file = "${libs-sources}/ivy-compile-sources.xml"/>
+    <ivy:retrieve type = "sources, source, src"
+      pattern = "${libs-sources}/[artifact]-[revision].[ext]"/>
+
+    <xslt style = "${build-root}/ivy-src.xslt"
+      in  = "${libs-sources}/ivy-provided.xml"
+      out = "${libs-sources}/ivy-provided-sources.xml">
+
+      <param name = "module" type = "STRING" expression = "provided-sources"/>
+    </xslt>
+
+    <ivy:resolve file = "${libs-sources}/ivy-provided-sources.xml"/>
+    <ivy:retrieve type = "sources, source, src"
+      pattern = "${libs-sources}/[artifact]-[revision].[ext]"/>
+  </target>
+
+</project>

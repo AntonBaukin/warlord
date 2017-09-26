@@ -1,0 +1,28 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<ivysettings>
+
+  <!-- ====[ Ivy Cache (private repository) ]==== -->
+
+  <property name  = "user.cache" override = "false"
+    value = "${ivy-cache}"/>
+ 
+  <caches defaultCacheDir = "${user.cache}"/>
+
+
+  <!-- ====[ Resolvers ]==== -->
+
+  <settings defaultResolver = "default"/>
+
+  <resolvers>
+
+    <!-- repository: maven.org -->
+    <ibiblio name = "maven.org" m2compatible = "true" useMavenMetadata = "false"
+      root = "http://repo1.maven.org/maven2/"/>
+
+    <!-- repositories list -->
+    <chain name = "default" returnFirst = "true">
+      <resolver ref = "maven.org"/>
+    </chain>
+  </resolvers>
+</ivysettings>

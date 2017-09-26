@@ -1,0 +1,77 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<ivy-module version = "2.0">
+
+  <info organisation = "WARLord Project" module = "warlord"
+    revision = "0.0.1" status = "integration">
+
+    <ivyauthor name = "Anton Baukin"
+       url = "mailto:anton.baukin@gmail.com"/>
+
+    <description>
+      Dependencies of WARLord application.
+    </description>
+  </info>
+
+  <configurations>
+
+    <conf name    = "compile"
+      description = "Libraries required to compile and run the web application"/>
+    
+    <conf name    = "provided"
+      description = "Libraries required to compile only, they must be provided
+        by any application server or container"/>
+    
+    <conf name    = "runtime"
+      description = "Libraries required to run the application, but not to compile"/>
+
+  </configurations>
+
+  <dependencies>
+
+
+    <!-- Spring Framework [4.3.x] -->
+
+    <dependency
+      org  = "org.springframework"
+      name = "spring-webmvc"
+      rev  = "4.3.11.RELEASE"
+      conf = "compile -> compile, master"/>
+
+    <dependency
+      org  = "org.springframework"
+      name = "spring-jdbc"
+      rev  = "4.3.11.RELEASE"
+      conf = "compile -> compile, master"/>
+
+    <dependency
+      org  = "org.springframework"
+      name = "spring-aop"
+      rev  = "4.3.11.RELEASE"
+      conf = "compile -> compile, master"/>
+
+
+    <!-- AspectJ Weaving [1.8.x] -->
+
+    <dependency
+      org  = "org.aspectj"
+      name = "aspectjweaver"
+      rev  = "1.8.10"
+      conf = "runtime -> compile, master"/>
+
+
+    <!-- Servlet [3.1] -->
+
+    <dependency
+      org  = "javax.servlet"
+      name = "javax.servlet-api"
+      rev  = "3.1.0"
+      conf = "provided -> compile, master"/>
+
+
+    <!-- Excluded Dependencies -->
+
+    <exclude org  = 'commons-logging' conf = '*'/>
+
+  </dependencies>
+</ivy-module>
