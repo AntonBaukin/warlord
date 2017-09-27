@@ -59,6 +59,11 @@
 
 
 
+  <!-- ====[ Local Tomcat Distribution ]==== -->
+
+  <import file = "build/tomcat.xml"/>
+
+
   <!-- ====[ § Dependenvies via Apache Ivy ]==== -->
 
   <uptodate  property = "?init-ivy-compile-upt"
