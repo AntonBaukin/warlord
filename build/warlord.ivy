@@ -20,7 +20,7 @@
     
     <conf name    = "provided"
       description = "Libraries required to compile only, they must be provided
-        by any application server or container"/>
+        by any application server or external class path"/>
     
     <conf name    = "runtime"
       description = "Libraries required to run the application, but not to compile"/>
@@ -67,6 +67,69 @@
       name = "javax.servlet-api"
       rev  = "3.1.0"
       conf = "provided -> compile, master"/>
+
+
+    <!-- Logging Facilities -->
+
+    <dependency
+      org  = 'org.apache.logging.log4j'
+      name = 'log4j-api'
+      rev  = '2.9.1'
+      conf = 'compile -> compile, master'/>
+
+    <dependency
+      org  = 'org.apache.logging.log4j'
+      name = 'log4j-1.2-api'
+      rev  = '2.9.1'
+      conf = 'runtime -> compile, master'/>
+
+    <dependency
+      org  = 'org.apache.logging.log4j'
+      name = 'log4j-core'
+      rev  = '2.9.1'
+      conf = 'runtime -> compile, master'/>
+
+    <dependency
+      org  = 'org.apache.logging.log4j'
+      name = 'log4j-slf4j-impl'
+      rev  = '2.9.1'
+      conf = 'runtime -> compile, master'/>
+
+    <dependency
+      org  = 'org.apache.logging.log4j'
+      name = 'log4j-jcl'
+      rev  = '2.9.1'
+      conf = 'runtime -> compile, master'/>
+
+    <dependency
+      org  = 'org.slf4j'
+      name = 'slf4j-api'
+      rev  = '1.7.25'
+      conf = 'runtime -> compile, master'/>
+
+    <dependency
+      org  = 'commons-logging'
+      name = 'commons-logging'
+      rev  = '1.2'
+      conf = 'runtime -> compile, master'/>
+
+
+    <!-- Connection Pool -->
+
+    <dependency
+      org  = 'com.mchange'
+      name = 'c3p0'
+      rev  = '0.9.5.2'
+      conf = 'compile -> compile, master'/>
+
+
+    <!-- HyperSQL Database -->
+
+    <dependency
+      org  = 'org.hsqldb'
+      name = 'hsqldb'
+      rev  = '2.4.0'
+      conf = 'runtime -> compile, master'/>
 
 
     <!-- Excluded Dependencies -->

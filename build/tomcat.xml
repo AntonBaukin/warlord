@@ -20,7 +20,7 @@
             value = '${tomcat-distr-load}/tomcat-extras'/>
 
   <property name  = 'tomcat-log4j'
-            value = '2.9.0'/>
+            value = '2.9.1'/>
 
   <property name  = 'tomcat-debug'
             value = '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'/>

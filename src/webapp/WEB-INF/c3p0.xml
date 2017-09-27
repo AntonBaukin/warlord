@@ -1,0 +1,80 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+
+  <!-- pool size -->
+
+  <entry key = 'initialPoolSize'>
+    8
+  </entry>
+
+  <entry key = 'minPoolSize'>
+    8
+  </entry>
+
+  <entry key = 'maxPoolSize'>
+    64
+  </entry>
+
+  <entry key = 'maxStatements'>
+    392
+  </entry>
+
+  <entry key = 'maxStatementsPerConnection'>
+    92
+  </entry>
+
+  <entry key = 'numHelperThreads'>
+    2
+  </entry>
+
+  <!-- connections acquire -->
+
+  <entry key = 'acquireIncrement'>
+    2
+  </entry>
+
+  <entry key = 'acquireRetryAttempts'>
+    8
+  </entry>
+
+  <entry key = 'acquireRetryDelay'>
+    250  <!-- milliseconds -->
+  </entry>
+
+  <!-- timings -->
+
+  <entry key = 'checkoutTimeout'>
+    4000 <!-- milliseconds -->
+  </entry>
+
+  <entry key = 'maxIdleTime'>
+    0   <!-- seconds -->
+  </entry>
+
+  <entry key = 'maxIdleTimeExcessConnections'>
+    30  <!-- seconds -->
+  </entry>
+
+  <entry key = 'maxConnectionAge'>
+    240 <!-- seconds -->
+  </entry>
+
+  <entry key = 'unreturnedConnectionTimeout'>
+    1800 <!-- seconds -->
+  </entry>
+
+  <!-- connection testing -->
+
+  <!--
+  <entry key = 'preferredTestQuery'>
+    select 1
+  </entry>
+  -->
+
+  <entry key = 'idleConnectionTestPeriod'>
+    0 <!-- seconds, 0 disables -->
+  </entry>
+
+</properties>

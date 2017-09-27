@@ -1,7 +1,7 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 
 <project name = "WARLord" default = "init-ivy"
-  xmlns:if = "ant:if" xmlns:ivy = 'antlib:org.apache.ivy.ant'>
+  xmlns:ivy = "antlib:org.apache.ivy.ant">
 
 
   <!-- ====[ Shared Variables ]==== -->
@@ -20,6 +20,9 @@
 
   <property name  = "ivy-cache"
             value = "${build-root}/.ivy-cache"/>
+
+  <property name  = "warlord-ivy"
+            value = "${build-root}/warlord.ivy"/>
 
   <property name  = "libs-compile"
             value = "${target-root}/.libs-compile"/>
@@ -56,88 +59,89 @@
 
 
 
-  <!--<mkdir dir = "${ivy-cache}"/>-->
-
   <!-- ====[ § Dependenvies via Apache Ivy ]==== -->
 
+  <uptodate  property = "?init-ivy-compile-upt"
+    srcfile = "${warlord-ivy}" targetfile = "${libs-compile}"/>
+
   <condition property = "?init-ivy-compile">
-    <not>
+    <and>
       <available type = "dir" file = "${libs-compile}"/>
-    </not>
+      <istrue value = "${?init-ivy-compile-upt}"/>
+    </and>
   </condition>
+
+  <uptodate  property = "?init-ivy-provided-upt"
+    srcfile = "${warlord-ivy}" targetfile = "${libs-provided}"/>
 
   <condition property = "?init-ivy-provided">
-    <not>
+    <and>
       <available type = "dir" file = "${libs-provided}"/>
-    </not>
+      <istrue value = "${?init-ivy-compile-upt}"/>
+    </and>
   </condition>
+
+  <uptodate  property = "?init-ivy-runtime-upt"
+    srcfile = "${warlord-ivy}" targetfile = "${libs-runtime}"/>
 
   <condition property = "?init-ivy-runtime">
-    <not>
+    <and>
       <available type = "dir" file = "${libs-runtime}"/>
-    </not>
+      <istrue value = "${?init-ivy-runtime-upt}"/>
+    </and>
   </condition>
 
-  <condition property = "?init-ivy">
-    <or>
+  <condition property = "?init-ivy-actual">
+    <and>
       <istrue value = "${?init-ivy-compile}"/>
       <istrue value = "${?init-ivy-provided}"/>
       <istrue value = "${?init-ivy-runtime}"/>
-    </or>
+    </and>
   </condition>
 
 
-  <!-- § reinit ivy -->
-
-  <target name = "reinit-ivy">
-
-  </target>
-
   <!-- § init ivy -->
 
-  <target name = "init-ivy" if = "?init-ivy">
+  <target name = "init-ivy" unless = "?init-ivy-actual">
 
+    <delete dir = "${libs-sources}"/>
     <mkdir dir = "${libs-sources}"/>
+
     <ivy:configure file = "${build-root}/setup.ivy"/>
 
+
     <!-- compile -->
-    <ivy:resolve file = "${build-root}/warlord.ivy"
-      conf = "compile" resolveId = "warlord-compile"
-      if:true = "${?init-ivy-compile}"/>
+    <ivy:resolve file = "${warlord-ivy}"
+      conf = "compile" resolveId = "warlord-compile"/>
 
-    <ivy:artifactreport tofile = "${libs-sources}/ivy-compile.xml"
-      if:true = "${?init-ivy-compile}"/>
+    <ivy:artifactreport tofile = "${libs-sources}/ivy-compile.xml"/>
 
+    <delete dir = "${libs-compile}"/>
     <ivy:retrieve resolveId = "warlord-compile" type = "jar, bundle"
-      pattern = "${libs-compile}/[artifact]-[revision].[ext]"
-      if:true = "${?init-ivy-compile}"/>
+      pattern = "${libs-compile}/[artifact]-[revision].[ext]"/>
 
 
     <!-- provided -->
-    <ivy:resolve file = "${build-root}/warlord.ivy"
-      conf = "provided" resolveId = "warlord-provided"
-      if:true = "${?init-ivy-provided}"/>
+    <ivy:resolve file = "${warlord-ivy}"
+      conf = "provided" resolveId = "warlord-provided"/>
 
-    <ivy:artifactreport tofile = "${libs-sources}/ivy-provided.xml"
-      if:true = "${?init-ivy-provided}"/>
+    <ivy:artifactreport tofile = "${libs-sources}/ivy-provided.xml"/>
 
+    <delete dir = "${libs-provided}"/>
     <ivy:retrieve resolveId = "warlord-provided" type = "jar, bundle"
-      pattern = "${libs-provided}/[artifact]-[revision].[ext]"
-      if:true = "${?init-ivy-provided}"/>
-    
+      pattern = "${libs-provided}/[artifact]-[revision].[ext]"/>
+
 
     <!-- runtime-->
-    <ivy:resolve file = "${build-root}/warlord.ivy"
-      conf = "runtime" resolveId = "warlord-runtime"
-      if:true = "${?init-ivy-runtime}"/>
+    <ivy:resolve file = "${warlord-ivy}"
+      conf = "runtime" resolveId = "warlord-runtime"/>
 
+    <delete dir = "${libs-runtime}"/>
     <ivy:retrieve resolveId = "warlord-runtime" type = "jar, bundle"
-      pattern = "${libs-runtime}/[artifact]-[revision].[ext]"
-      if:true = "${?init-ivy-runtime}"/>
+      pattern = "${libs-runtime}/[artifact]-[revision].[ext]"/>
 
 
     <!-- sources -->
-
     <xslt style = "${build-root}/ivy-src.xslt"
       in  = "${libs-sources}/ivy-compile.xml"
       out = "${libs-sources}/ivy-compile-sources.xml">

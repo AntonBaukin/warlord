@@ -74,7 +74,7 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$//warlord.iml" filepath="$PROJECT_DIR$//warlord.iml" />
+      <module fileurl="file://$PROJECT_DIR$/warlord.iml" filepath="$PROJECT_DIR$/warlord.iml" />
     </modules>
   </component>
   <component name="ProjectReloadState">
@@ -92,5 +92,29 @@
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+  </component>
+  <component name="libraryTable">
+    <library name="Compile">
+      <CLASSES>
+        <root url="file://$PROJECT_DIR$/../target/.libs-compile" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="file://$PROJECT_DIR$/../target/.libs-sources" />
+      </SOURCES>
+      <jarDirectory url="file://$PROJECT_DIR$/../target/.libs-compile" recursive="false" />
+      <jarDirectory url="file://$PROJECT_DIR$/../target/.libs-sources" recursive="false" type="SOURCES" />
+    </library>
+    <library name="Provided">
+      <CLASSES>
+        <root url="file://$PROJECT_DIR$/../target/.libs-provided" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="file://$PROJECT_DIR$/../target/.libs-sources" />
+      </SOURCES>
+      <jarDirectory url="file://$PROJECT_DIR$/../target/.libs-provided" recursive="false" />
+      <jarDirectory url="file://$PROJECT_DIR$/../target/.libs-sources" recursive="false" type="SOURCES" />
+    </library>
   </component>
 </project>
