@@ -1,0 +1,72 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<web-app version = "3.0"
+  xmlns = "http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation = "http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+  <display-name>
+    WARLord — Web Application Skeleton
+  </display-name>
+
+
+  <!--====================================================
+    =                 Context Parameters                 =
+    ====================================================-->
+
+  <context-param>
+    <description>
+      This parameter forbids implicit startup of the Log4j2
+      environment from the web fragmen. If allow so, Log4j
+      may be turned off before all else modules had done
+      their logging thus damaging the log files.
+    </description>
+
+    <param-name>isLog4jAutoInitializationDisabled</param-name>
+    <param-value>true</param-value>
+  </context-param>
+
+
+  <!--====================================================
+    =                      Listeners                     =
+    ====================================================-->
+
+  <!-- Logging Boot Initializer -->
+
+  <listener>
+    <description>
+      The first listener activated during the web application
+      startup to bring up the logging facility.
+    </description>
+
+    <display-name>Logging Boot Initializer</display-name>
+    <listener-class>
+      net.java.web.warlord.log.LoggingBootListener
+    </listener-class>
+  </listener>
+
+  <!-- Spring Context and Request Listeners -->
+
+  <listener>
+    <description>
+      Spring Framework startup initialization.
+    </description>
+
+    <display-name>Spring Startup Context Listener</display-name>
+    <listener-class>
+      org.springframework.web.context.ContextLoaderListener
+    </listener-class>
+  </listener>
+
+  <listener>
+    <description>
+      Initializes the request context for Spring Framework.
+    </description>
+
+    <display-name>Spring Request Context Listener</display-name>
+    <listener-class>
+      org.springframework.web.context.request.RequestContextListener
+    </listener-class>
+  </listener>
+</web-app>

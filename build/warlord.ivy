@@ -46,7 +46,7 @@
 
     <dependency
       org  = "org.springframework"
-      name = "spring-aop"
+      name = "spring-aspects"
       rev  = "4.3.11.RELEASE"
       conf = "compile -> compile, master"/>
 
@@ -74,31 +74,37 @@
     <dependency
       org  = 'org.apache.logging.log4j'
       name = 'log4j-api'
-      rev  = '2.9.1'
+      rev  = '2.8.2'
+      conf = 'compile -> compile, master'/>
+
+    <dependency
+      org  = 'org.apache.logging.log4j'
+      name = 'log4j-core'
+      rev  = '2.8.2'
+      conf = 'compile -> compile, master'/>
+
+    <dependency
+      org  = 'org.apache.logging.log4j'
+      name = 'log4j-web'
+      rev  = '2.8.2'
       conf = 'compile -> compile, master'/>
 
     <dependency
       org  = 'org.apache.logging.log4j'
       name = 'log4j-1.2-api'
-      rev  = '2.9.1'
-      conf = 'runtime -> compile, master'/>
-
-    <dependency
-      org  = 'org.apache.logging.log4j'
-      name = 'log4j-core'
-      rev  = '2.9.1'
+      rev  = '2.8.2'
       conf = 'runtime -> compile, master'/>
 
     <dependency
       org  = 'org.apache.logging.log4j'
       name = 'log4j-slf4j-impl'
-      rev  = '2.9.1'
+      rev  = '2.8.2'
       conf = 'runtime -> compile, master'/>
 
     <dependency
       org  = 'org.apache.logging.log4j'
       name = 'log4j-jcl'
-      rev  = '2.9.1'
+      rev  = '2.8.2'
       conf = 'runtime -> compile, master'/>
 
     <dependency
@@ -134,7 +140,7 @@
 
     <!-- Excluded Dependencies -->
 
-    <exclude org  = 'commons-logging' conf = '*'/>
+    <exclude org  = 'commons-logging' conf = 'compile'/>
 
   </dependencies>
 </ivy-module>
