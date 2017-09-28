@@ -11,6 +11,10 @@ import org.apache.logging.log4j.core.LifeCycle;
 import org.apache.logging.log4j.web.Log4jWebSupport;
 import org.apache.logging.log4j.web.WebLoggerContextUtils;
 
+/* Warlord */
+
+import net.java.web.warlord.servlet.Req;
+
 
 /**
  * Register this listener as the first to start.
@@ -28,6 +32,9 @@ public class      LoggingBootListener
 
 	public void contextInitialized(ServletContextEvent event)
 	{
+		//=: set the global context
+		Req.context = event.getServletContext();
+
 		//~: access logging framework
 		this.logLifeCycle = WebLoggerContextUtils.
 		  getWebLifeCycle(event.getServletContext());
@@ -48,6 +55,9 @@ public class      LoggingBootListener
 		finally
 		{
 			this.logLifeCycle = null;
+
+			//=: reset the global context
+			Req.context = null;
 		}
 	}
 }

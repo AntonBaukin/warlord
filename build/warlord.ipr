@@ -63,6 +63,8 @@
         <option name="processLiterals" value="false" />
         <option name="processComments" value="true" />
       </inspection_tool>
+      <inspection_tool class="ThrowableInstanceNeverThrown" enabled="true" level="INFO" enabled_by_default="true" />
+      <inspection_tool class="ThrowableResultOfMethodCallIgnored" enabled="true" level="INFO" enabled_by_default="true" />
       <inspection_tool class="UnusedParameters" enabled="true" level="INFO" enabled_by_default="true" />
       <inspection_tool class="unused" enabled="true" level="INFO" enabled_by_default="true">
         <option name="LOCAL_VARIABLE" value="true" />
@@ -127,9 +129,6 @@
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
-  <component name="SvnConfiguration" myUseAcceleration="nothing">
-    <configuration>C:\Users\Anton\AppData\Roaming\Subversion</configuration>
-  </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
   </component>

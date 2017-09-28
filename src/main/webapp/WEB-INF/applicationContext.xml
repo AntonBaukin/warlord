@@ -10,9 +10,6 @@
      http://www.springframework.org/schema/context/spring-context.xsd'>
 
 
-  <context:annotation-config/>
-
-
   <!--=================================================
     =  Load-Time Weaving                              =
     +==================================================
@@ -34,5 +31,15 @@
     +================================================-->
 
   <tx:annotation-driven mode = 'aspectj'/>
+
+
+  <!--=================================================
+    =  Packages Scanned for Beans                     =
+    +================================================-->
+
+  <context:annotation-config/>
+
+  <context:component-scan base-package =
+    'net.java.web.warlord, net.java.web.app'/>
 
 </beans>

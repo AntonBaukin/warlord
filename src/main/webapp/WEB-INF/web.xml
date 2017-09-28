@@ -1,6 +1,6 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 
-<web-app version = "3.0"
+<web-app version = "3.0" metadata-complete = "true"
   xmlns = "http://java.sun.com/xml/ns/javaee"
   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation = "http://java.sun.com/xml/ns/javaee
@@ -25,6 +25,22 @@
 
     <param-name>isLog4jAutoInitializationDisabled</param-name>
     <param-value>true</param-value>
+  </context-param>
+
+  <context-param>
+    <description>
+      Warlord Application Context is special version of Spring
+      Application Context that provides additional information
+      to the beans (namely, prototype beans) that are injected
+      into else beans as the fields or method arguments. This
+      information includes: the list of template classes (for
+      beans of template classes) and the field annotations.
+    </description>
+
+    <param-name>contextClass</param-name>
+    <param-value>
+      net.java.web.warlord.object.spring.WarlordApplicationContext
+    </param-value>
   </context-param>
 
 
@@ -69,4 +85,33 @@
       org.springframework.web.context.request.RequestContextListener
     </listener-class>
   </listener>
+
+
+  <!--===================================================
+   =                  Filters Bridge                    =
+   ====================================================-->
+
+  <filter>
+    <description>
+      Connects filters processing of the web container
+      with the application-level filters (Spring beans).
+    </description>
+
+    <filter-name>Filters Bridge</filter-name>
+
+    <filter-class>
+      net.java.web.warlord.servlet.filter.FiltersBridge
+    </filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>Filters Bridge</filter-name>
+
+    <url-pattern>/*</url-pattern>
+
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+  </filter-mapping>
 </web-app>
