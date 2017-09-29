@@ -129,13 +129,19 @@
       conf = 'compile -> compile, master'/>
 
 
-    <!-- HyperSQL Database -->
+    <!-- Databases and Drivers -->
 
     <dependency
       org  = 'org.hsqldb'
       name = 'hsqldb'
       rev  = '2.4.0'
       conf = 'runtime -> compile, master'/>
+
+    <dependency
+      org  = 'org.postgresql'
+      name = 'postgresql'
+      rev  = '9.4.1212'
+      conf = 'provided -> compile, master'/>
 
 
     <!-- Excluded Dependencies -->

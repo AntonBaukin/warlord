@@ -13,6 +13,18 @@ import java.util.Collection;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class SU
 {
+	/* Tiny Tests */
+
+	/**
+	 * Tells that the given string is whitespace-empty:
+	 * it's null, empty, or contains only spaces.
+	 */
+	public static boolean ises(String s)
+	{
+		return (s == null) || s.isEmpty() || s.trim().isEmpty();
+	}
+
+
 	/* Concatenations */
 
 	public static String cat(Object... objs)

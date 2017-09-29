@@ -2,16 +2,22 @@ package net.java.web.app;
 
 /* Spring Framework */
 
-import net.java.web.warlord.servlet.filter.FiltersGlobalPoint;
-import net.java.web.warlord.servlet.filter.FiltersPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /* Warlord */
 
-import net.java.web.warlord.servlet.filter.FilterStage;
+import net.java.web.warlord.db.DatabaseBean;
+import net.java.web.warlord.db.TxFilter;
+import net.java.web.warlord.object.CallMe;
 import net.java.web.warlord.servlet.filter.PickFilter;
+import net.java.web.warlord.servlet.filter.FiltersGlobalPoint;
+import net.java.web.warlord.servlet.filter.FiltersPoint;
+
+/* This Application */
+
+import net.java.web.app.db.HyperSQL;
 
 
 /**
@@ -39,6 +45,24 @@ public class Global
 	@Autowired @PickFilter(order = 10)
 	public IndexFilter indexFilter;
 
-	@Autowired @PickFilter(order = 20)
+	@Autowired @PickFilter(order = 15)
 	public HelloFilter helloFilter;
+
+	@Autowired @PickFilter(order = 20)
+	@CallMe("setTxFilter")
+	public TxFilter txFilter;
+
+	private void setTxFilter(TxFilter tx)
+	{
+		tx.setContexts("/get", "/set");
+	}
+
+
+	/* Application Database */
+
+	@Bean
+	public DatabaseBean database()
+	{
+		return new DatabaseBean(new HyperSQL());
+	}
 }
