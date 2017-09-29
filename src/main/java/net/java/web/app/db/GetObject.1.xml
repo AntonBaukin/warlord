@@ -1,0 +1,31 @@
+<queries dialect = "HyperSQL">
+
+  <query id = "exists-type-multi">
+
+    select 1 from Objects where (pkey = ?) and type in
+      (UNNEST(REGEXP_SUBSTRING_ARRAY(?, '\w+')))
+
+  </query>
+
+  <query id = "json-multi">
+
+    select json from Objects where (pkey = ?) and type in
+      (UNNEST(REGEXP_SUBSTRING_ARRAY(?, '\w+')))
+
+  </query>
+
+  <query id = "load-multi">
+
+    select uuid(pkey), uuid(owner), ts, type, text, json
+      from Objects where (pkey = ?) and type in
+        (UNNEST(REGEXP_SUBSTRING_ARRAY(?, '\w+')))
+
+  </query>
+
+  <query id = "load-file-multi">
+
+    select file from Objects where (pkey = ?) and type in
+      (UNNEST(REGEXP_SUBSTRING_ARRAY(?, '\w+')))
+
+  </query>
+</queries>

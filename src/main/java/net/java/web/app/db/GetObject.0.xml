@@ -1,0 +1,148 @@
+<queries>
+
+  <query id = "exists">
+
+    select 1 from Objects where (pkey = cast(? as uuid))
+
+  </query>
+
+  <query id = "exists-type">
+
+    select 1 from Objects where
+      (pkey = cast(? as uuid)) and (type = ?)
+
+  </query>
+
+  <query id = "guess-type+prefix">
+
+    select cast(pkey as char(36)) from Objects where
+      (type = ?) and (cast(pkey as char(36)) like ? || '%')
+    limit 2
+
+  </query>
+
+  <query id = "json">
+
+    select json from Objects where
+      (pkey = cast(? as uuid)) and (type = ?)
+
+  </query>
+
+  <query id = "load">
+
+    select cast(pkey as char(36)), cast(owner as char(36)),
+      ts, type, text, json from Objects
+    where ((pkey = cast(? as uuid))) and (type = ?)
+
+  </query>
+
+  <query id = "each-type">
+
+    select cast(pkey as char(36)), cast(owner as char(36)),
+      ts, type, text, json from Objects
+    where (type = ?) order by ts
+
+  </query>
+
+  <query id = "each-type+text">
+
+    select cast(pkey as char(36)), cast(owner as char(36)),
+      ts, type, text, json from Objects
+    where (type = ?) and (text = ?) order by ts
+
+  </query>
+
+  <query id = "each-owner+type">
+
+    select cast(pkey as char(36)), cast(owner as char(36)),
+      ts, type, text, json from Objects
+    where ((owner = cast(? as uuid))) and (type = ?) order by ts
+
+  </query>
+
+  <query id = "each-owner+type+text">
+
+    select cast(pkey as char(36)), cast(owner as char(36)),
+      ts, type, text, json from Objects
+    where ((owner = cast(? as uuid))) and (type = ?) and (text = ?)
+    order by ts
+
+  </query>
+
+  <query id = "save">
+
+    insert into Objects (pkey, owner, ts, type, text, json)
+      values (cast(? as uuid), cast(? as uuid), ?, ?, ?, ?)
+
+  </query>
+
+  <query id = "update">
+
+    update Objects set owner = cast(? as uuid), ts = ?,
+      type = ?, text = ?, json = ?
+    where (pkey = cast(? as uuid)) and (type = ?)
+
+  </query>
+
+  <query id = "update-json">
+
+    update Objects set ts = ?, json = ?
+      where (pkey = cast(? as uuid)) and (type = ?)
+
+  </query>
+
+  <query id = "touch">
+
+    update Objects set ts = ? where (pkey = cast(? as uuid))
+
+  </query>
+
+  <query id = "load-file">
+
+    select file from Objects where
+      (pkey = cast(? as uuid)) and (type = ?)
+
+  </query>
+
+  <query id = "update-file">
+
+    update Objects set file = ?
+      where (pkey = cast(? as uuid)) and (type = ?)
+
+  </query>
+
+  <query id = "delete-by-uuid">
+
+    delete from Objects where (pkey = cast(? as uuid))
+
+  </query>
+
+  <query id = "delete-by-uuid+type">
+
+    delete from Objects where (pkey = cast(? as uuid)) and (type = ?)
+
+  </query>
+
+  <query id = "last-owned+type">
+
+    select cast(pkey as char(36)) from Objects where
+      (owner = cast(? as uuid)) and (type = ?)
+    order by ts desc limit 1
+
+  </query>
+
+  <!--
+    This query returns owned objects of the given type
+    that do not have any other propjections, i.e. selecting
+    by the uuid returns only one record.
+  -->
+  <query id = "each-single-owner+type">
+
+    select cast(o1.pkey as char(36)), cast(o1.owner as char(36)),
+      o1.ts, o1.type, o1.text, o1.json from Objects o1
+    where (o1.owner = cast(? as uuid)) and (o1.type = ?) and
+      1 = (select count(o2.pkey) from Objects o2 where o2.pkey = o1.pkey)
+    order by o1.ts
+
+  </query>
+</queries>
