@@ -30,7 +30,6 @@ import net.java.web.warlord.LU;
 import net.java.web.warlord.object.AutoAwire;
 
 
-
 /**
  * Spring Bean Factory that enhances @Autowire abilities
  * with fields of generic types hooked by {@link AutoAwire}.

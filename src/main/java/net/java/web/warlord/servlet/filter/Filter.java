@@ -40,7 +40,7 @@ public interface Filter
 	 * {@link FilterTask#doBreak()}. The breaking may not be
 	 * further cancelled.
 	 */
-	public void  openFilter(FilterTask task);
+	void openFilter(FilterTask task);
 
 
 	/* Advanced Filter */

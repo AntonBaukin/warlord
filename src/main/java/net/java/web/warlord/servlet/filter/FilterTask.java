@@ -17,7 +17,7 @@ public interface FilterTask
 {
 	/* Filter Task */
 
-	public FilterStage getFilterStage();
+	FilterStage getFilterStage();
 
 	/**
 	 * Call this method to continue the cycle from
@@ -27,13 +27,13 @@ public interface FilterTask
 	 * Allows to nest invocation context to create
 	 * transaction scopes and else needs.
 	 */
-	public void        continueCycle();
+	void        continueCycle();
 
 	/**
 	 * Tells whether the cycle was breaked. Breaking
 	 * may not be cancelled.
 	 */
-	public boolean     isBreaked();
+	boolean     isBreaked();
 
 	/**
 	 * Breaks the cycle. Has meaning only in
@@ -42,28 +42,20 @@ public interface FilterTask
 	 * If the filter sets or raises an exception,
 	 * the cycle is automatically breaked.
 	 */
-	public void        doBreak();
+	void        doBreak();
 
 	/**
 	 * Returns the exception saved (or raised) in the task
 	 * by one of the filters of the cycle.
 	 */
-	public Throwable   getError();
+	Throwable   getError();
 
-	public void        setError(Throwable error);
+	void        setError(Throwable error);
 
 
 	/* Filter Task (access the request) */
 
-	public HttpServletRequest  getRequest();
+	HttpServletRequest  getRequest();
 
-	public HttpServletResponse getResponse();
-
-
-	/* Support */
-
-	default boolean isGet()
-	{
-		return "GET".equalsIgnoreCase(getRequest().getMethod());
-	}
+	HttpServletResponse getResponse();
 }

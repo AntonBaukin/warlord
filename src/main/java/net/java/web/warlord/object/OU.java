@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -31,6 +32,7 @@ import net.java.web.warlord.servlet.Req;
  *
  * @author anton.baukin@gmail.com
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class OU
 {
 	/* Access Spring Beans */
@@ -61,7 +63,6 @@ public class OU
 	 * taken from the simple name of the class with
 	 * the first letter lower-cased.
 	 */
-	@SuppressWarnings("unchecked")
 	public static <B> B       bean(Class<B> beanClass)
 	{
 		String        sn = beanClass.getSimpleName();
@@ -96,6 +97,119 @@ public class OU
 	}
 
 
+	/* Raw Structured Objects Access */
+
+	/**
+	 * Represents given raw list as a collection
+	 * of raw structured objects.
+	 */
+	public static List<Map<String, Object>> list(Object o)
+	{
+		return (List<Map<String, Object>>) o;
+	}
+
+	/**
+	 * Represents given raw list as a raw structured object.
+	 */
+	public static Map<String, Object> map(Object o)
+	{
+		return (Map<String, Object>) o;
+	}
+
+	/**
+	 * With the given path, returns the nested value.
+	 * Path item must be a string for objects, or integer
+	 * for arrays. If intermediate element is not found,
+	 * or index goes out of scope, returns null.
+	 */
+	public static Object get(Object o, Object... path)
+	{
+		if(o instanceof MapBuilder)
+			o = ((MapBuilder)o).map;
+
+		for(Object p : path)
+		{
+			//?: {got empty intermediate}
+			if(o == null) return null;
+
+			//?: {element is a map}
+			if(o instanceof Map)
+			{
+				//?: {the key is not a string}
+				EX.assertx(p instanceof String);
+				o = ((Map)o).get(p);
+			}
+
+			//?: {element is a list}
+			else if(o instanceof List)
+			{
+				//?: {the key is not an integer}
+				if(!(p instanceof Integer))
+					throw EX.ass();
+
+				//?: {index out of scope}
+				int k = (Integer)p;
+				if(k < 0 || k >= ((List)o).size())
+					return null;
+
+				o = ((List)o).get(k);
+			}
+
+			//~: wrong element tyoe
+			else throw EX.ass();
+		}
+
+		return o;
+	}
+
+
+	/* Raw Structured Objects Building */
+
+	/**
+	 * Shortcut to create Map Builder.
+	 */
+	public static MapBuilder mb()
+	{
+		return new MapBuilder();
+	}
+
+	/**
+	 * Shortcut to create Map Builder initialized
+	 * with decoded JSON object.
+	 */
+	public static MapBuilder mb(String json)
+	{
+		//?: {no model is provided}
+		if(json == null || json.isEmpty())
+			return null;
+
+		return new MapBuilder().put(OU.map(Json.s2o(json)));
+	}
+
+	/**
+	 * Shortcut to create Map Builder initialized
+	 * with the given raw Map instance.
+	 */
+	public static MapBuilder mb(Object m)
+	{
+		return new MapBuilder(null, OU.map(m));
+	}
+
+	/**
+	 * Iterates iver the collection of Mapped objects
+	 * creating raw Maps from them. The resulting list
+	 * may be encoded as JSON array (of that objects).
+	 */
+	public static List<Map<String, Object>> list(Iterable<? extends Mapped> ms)
+	{
+		ArrayList<Map<String, Object>> r = new ArrayList<>();
+
+		for(Mapped m : ms)
+			r.add(m.map());
+
+		return r;
+	}
+
 
 	/* Classes and Hierarchy */
 
@@ -104,7 +218,6 @@ public class OU
 	 * up by the levels of declaration starting with the
 	 * class given. Return true to stop traversing.
 	 */
-	@SuppressWarnings("unchecked")
 	public static void   up(Class<?> c, Predicate<Class<?>> f)
 	{
 		EX.assertn(c);

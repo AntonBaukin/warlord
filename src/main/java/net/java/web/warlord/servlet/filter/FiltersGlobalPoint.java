@@ -9,7 +9,6 @@ import java.util.Iterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
 /* Warlord */
 
@@ -23,7 +22,6 @@ import net.java.web.warlord.object.BeanTracker;
  *
  * @author anton.baukin@gmail.com.
  */
-@Component
 public class FiltersGlobalPoint extends FiltersPointBase
 {
 	/* protected: filters discovery */

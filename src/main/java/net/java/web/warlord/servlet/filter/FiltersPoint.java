@@ -9,5 +9,5 @@ public interface FiltersPoint
 {
 	/* Filters Point */
 
-	public Filter[] getFilters(FilterStage stage);
+	Filter[] getFilters(FilterStage stage);
 }
