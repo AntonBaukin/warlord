@@ -276,8 +276,8 @@
       echo.perform()
 
       var page = readURL(url)
-      url = findText(page, 'https?://.+/apache-tomcat-8\\.0\\.\\d+\\.tar\\.gz')
-      if(!url || !url.length) throw 'Could not find Tomcat 8 download link!'
+      url = findText(page, 'https?://.+/apache-tomcat-8\\.5\\.\\d+\\.tar\\.gz')
+      if(!url || !url.length) throw 'Could not find Tomcat 8.5 download link!'
       project.setProperty('tomcat-distr-url', url)
 
       var url1 = findText(page, 'https?://.+/tomcat-juli\\.jar')

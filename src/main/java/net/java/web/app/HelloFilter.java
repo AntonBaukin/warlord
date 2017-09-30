@@ -25,8 +25,8 @@ public class HelloFilter extends PickedFilter
 		String c = task.getRequest().getContextPath();
 		String u = task.getRequest().getRequestURI();
 
-		//?: {not the index page}
-		if(!u.equals(c + "/index.html"))
+		//?: {not the hello page}
+		if(!u.equals(c + "/hello"))
 			return;
 
 		//?: {not a GET request}
