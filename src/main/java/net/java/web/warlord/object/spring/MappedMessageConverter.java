@@ -90,7 +90,7 @@ public class MappedMessageConverter
 			//?: {a map is requested}
 			if(Map.class.isAssignableFrom(c))
 				//?: {it's that map}
-				if(c.equals(o.getClass()))
+				if(c.isInterface() || c.equals(o.getClass()))
 					return o;
 				else
 				{

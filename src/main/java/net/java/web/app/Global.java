@@ -14,15 +14,18 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /* Warlord */
 
+import net.java.web.warlord.EX;
 import net.java.web.warlord.db.DatabaseBean;
+import net.java.web.warlord.db.Dialect;
 import net.java.web.warlord.db.TxFilter;
 import net.java.web.warlord.object.CallMe;
 import net.java.web.warlord.object.spring.MappedMessageConverter;
@@ -34,6 +37,7 @@ import net.java.web.warlord.servlet.filter.FiltersPoint;
 /* This Application */
 
 import net.java.web.app.db.HyperSQL;
+import net.java.web.app.web.IndexFilter;
 
 
 /**
@@ -61,16 +65,13 @@ public class Global extends WebMvcConfigurerAdapter
 	@Autowired @PickFilter(order = 10)
 	public IndexFilter indexFilter;
 
-	@Autowired @PickFilter(order = 15)
-	public HelloFilter helloFilter;
-
 	@Autowired @PickFilter(order = 20)
 	@CallMe("setTxFilter")
 	public TxFilter txFilter;
 
 	private void setTxFilter(TxFilter tx)
 	{
-		tx.setContexts("/get", "/set");
+		tx.setContexts("/get/", "/update/", "/save/");
 	}
 
 	/**
@@ -109,9 +110,22 @@ public class Global extends WebMvcConfigurerAdapter
 	public DatabaseBean dbBean;
 
 	@Bean
+	public Dialect databaseDialect()
+	{
+		return EX.assertn(dbBean).database;
+	}
+
+	@Bean
 	public DataSource dataSource()
 	{
-		return dbBean.getDataSource();
+		return EX.assertn(dbBean).getDataSource();
+	}
+
+	@Bean
+	public PlatformTransactionManager transactionManager()
+	{
+		return new DataSourceTransactionManager(
+		  EX.assertn(dataSource()));
 	}
 
 

@@ -210,6 +210,24 @@ public class OU
 		return r;
 	}
 
+	public static <O extends Unmapped> O unmap(Class<O> c, Map<String, Object> m)
+	{
+		try
+		{
+			//~: create un-mapped instance
+			O o = EX.assertn(c).newInstance();
+
+			//~: and fill it with data
+			o.unmap(EX.assertn(m));
+
+			return o;
+		}
+		catch(Throwable e)
+		{
+			throw EX.wrap(e);
+		}
+	}
+
 
 	/* Classes and Hierarchy */
 

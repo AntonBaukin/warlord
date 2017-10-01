@@ -1,4 +1,4 @@
-package net.java.web.app;
+package net.java.web.app.web;
 
 /* Spring Framework */
 
@@ -70,7 +70,7 @@ public class IndexFilter extends PickedFilter
 		//…: somehow select the index page depending
 		//   on the user logged in and so...
 
-		return "/index";
+		return "/index.html";
 	}
 
 	@Autowired

@@ -2,8 +2,6 @@ package net.java.web.warlord.db;
 
 /* Spring Framework */
 
-import net.java.web.warlord.servlet.filter.FilterTask;
-import net.java.web.warlord.servlet.filter.PickedFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -12,6 +10,8 @@ import org.springframework.stereotype.Component;
 /* Warlord */
 
 import net.java.web.warlord.EX;
+import net.java.web.warlord.servlet.filter.FilterTask;
+import net.java.web.warlord.servlet.filter.PickedFilterTracked;
 
 
 /**
@@ -21,7 +21,7 @@ import net.java.web.warlord.EX;
  * @author anton.baukin@gmail.com.
  */
 @Component @Scope("prototype")
-public class TxFilter extends PickedFilter
+public class TxFilter extends PickedFilterTracked
 {
 	/* Filter */
 

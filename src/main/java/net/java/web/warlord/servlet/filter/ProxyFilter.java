@@ -1,23 +1,13 @@
 package net.java.web.warlord.servlet.filter;
 
-/* Java Annotations */
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 /* Java Servlet */
 
 import javax.servlet.ServletContext;
 
 /* Spring Framework */
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-/* Warlord */
-
-import net.java.web.warlord.object.BeanTracker;
 
 
 /**
@@ -28,7 +18,7 @@ import net.java.web.warlord.object.BeanTracker;
  * @author anton.baukin@gmail.com.
  */
 @Component @Scope("prototype")
-public class ProxyFilter extends PickedFilter
+public class ProxyFilter extends PickedFilterTracked
 {
 	public void openFilter(FilterTask task)
 	{
@@ -60,24 +50,6 @@ public class ProxyFilter extends PickedFilter
 	}
 
 	protected volatile ServletContext ctx;
-
-
-	/* protected: initialization */
-
-	@Autowired
-	protected BeanTracker beanTracker;
-
-	@PostConstruct
-	protected void register()
-	{
-		beanTracker.add(this);
-	}
-
-	@PreDestroy
-	protected void close()
-	{
-		beanTracker.remove(this);
-	}
 
 
 	/* Filter Proxy */

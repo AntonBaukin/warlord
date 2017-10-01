@@ -43,6 +43,7 @@
     <profile version="1.0">
       <option name="myName" value="Project Default" />
       <option name="myLocal" value="true" />
+      <inspection_tool class="Convert2streamapi" enabled="true" level="INFO" enabled_by_default="true" />
       <inspection_tool class="IgnoreResultOfCall" enabled="false" level="WARNING" enabled_by_default="false">
         <option name="m_reportAllNonLibraryCalls" value="false" />
         <option name="callCheckString" value="java.io.File,.*,java.io.InputStream,read|skip|available|markSupported,java.io.Writer,read|skip|ready|markSupported,java.lang.Boolean,.*,java.lang.Byte,.*,java.lang.Character,.*,java.lang.Double,.*,java.lang.Float,.*,java.lang.Integer,.*,java.lang.Long,.*,java.lang.Math,.*,java.lang.Object,equals|hashCode|toString,java.lang.Short,.*,java.lang.StrictMath,.*,java.lang.String,.*,java.math.BigInteger,.*,java.math.BigDecimal,.*,java.net.InetAddress,.*,java.net.URI,.*,java.util.UUID,.*,java.util.regex.Matcher,pattern|toMatchResult|start|end|group|groupCount|matches|find|lookingAt|quoteReplacement|replaceAll|replaceFirst|regionStart|regionEnd|hasTransparantBounds|hasAnchoringBounds|hitEnd|requireEnd,java.util.regex.Pattern,.*" />
@@ -76,6 +77,9 @@
       </inspection_tool>
       <inspection_tool class="SpringJavaAutowiredMembersInspection" enabled="true" level="INFO" enabled_by_default="true" />
       <inspection_tool class="SqlNoDataSourceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="SuspiciousMethodCalls" enabled="true" level="INFO" enabled_by_default="true">
+        <option name="REPORT_CONVERTIBLE_METHOD_CALLS" value="true" />
+      </inspection_tool>
       <inspection_tool class="ThrowableInstanceNeverThrown" enabled="true" level="INFO" enabled_by_default="true" />
       <inspection_tool class="ThrowableResultOfMethodCallIgnored" enabled="true" level="INFO" enabled_by_default="true" />
       <inspection_tool class="UnusedParameters" enabled="true" level="INFO" enabled_by_default="true" />
@@ -152,9 +156,6 @@
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
-  <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/../src/main/java/net/java/web/app/db/hsqldb.sql" dialect="H2" />
-  </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
   </component>

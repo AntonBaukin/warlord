@@ -136,7 +136,7 @@ public class FilterCycle
 			return;
 
 		//?: {current scope is not the tail}
-		if(s.last + 1 < filters.length)
+		if(s.last + 1 <= filters.length)
 			return;
 
 		//~: invoke the terminal filter
@@ -168,8 +168,10 @@ public class FilterCycle
 
 	protected void  closeFilters(Scope s)
 	{
+		final int last = Math.min(s.last, filters.length - 1);
+
 		//~: close the filters of our range [first; last]
-		for(int i = s.last;(i >= s.first);i--) try
+		for(int i = last;(i >= s.first);i--) try
 		{
 			filters[i].closeFilter(task);
 		}

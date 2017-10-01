@@ -18,6 +18,9 @@ import org.springframework.stereotype.Component;
 import net.java.web.warlord.EX;
 import net.java.web.warlord.db.GetBase;
 import net.java.web.warlord.io.Streams.BytesStream;
+import net.java.web.warlord.object.Entity;
+import net.java.web.warlord.object.Json;
+import net.java.web.warlord.object.OU;
 
 
 /**
@@ -27,7 +30,7 @@ import net.java.web.warlord.io.Streams.BytesStream;
  * @author anton.baukin@gmail.com.
  */
 @Component
-public class GetObject extends GetBase
+public class GetObjects extends GetBase
 {
 	/* Objects Search & Load */
 
@@ -109,6 +112,17 @@ public class GetObject extends GetBase
 
 		Object[] r = first(q, uuid, type);
 		return (r == null)?(null):unzip(r, 0);
+	}
+
+	public <O extends Entity> O entity(Class<O> cls, String uuid)
+	{
+		//~: load the object document
+		String json = this.json(uuid, cls.getSimpleName());
+
+		if(json == null) //?: {found it not}
+			return null;
+
+		return OU.unmap(cls, OU.map(Json.s2o(json)));
 	}
 
 	public void    assign(Map<String, Object> o, Object[] r)
@@ -246,6 +260,33 @@ public class GetObject extends GetBase
 	}
 
 	/**
+	 * Creates save mapping from an Entity.
+	 */
+	public Map<String, Object> saveMap(String owner, Entity e)
+	{
+		Map<String, Object> m = new LinkedHashMap<>();
+
+		//~: generate new uuid
+		EX.assertx(e != null && e.getUuid() == null);
+		e.setUuid(this.newUUID());
+
+		//=: uuid
+		m.put("uuid", e.getUuid());
+
+		//=: optional owner
+		if(owner != null)
+			m.put("owner", owner);
+
+		//=: entity type
+		m.put("type", e.getClass().getSimpleName());
+
+		//=: embedded object
+		m.put("json", Json.o2s(e));
+
+		return m;
+	}
+
+	/**
 	 * Update analog of {@link #save(Map)}.
 	 * Note that given timestamp is not applied!
 	 */
@@ -282,6 +323,14 @@ public class GetObject extends GetBase
 		EX.asserts(type);
 
 		update(q("update-json"), params(ts, zip(json), uuid, type));
+	}
+
+	public void    update(Entity e)
+	{
+		update(EX.assertn(e).getUuid(),
+		  e.getClass().getSimpleName(),
+		  Json.o2s(e)
+		);
 	}
 
 	public void    touch(String uuid)
@@ -393,6 +442,41 @@ public class GetObject extends GetBase
 		EX.asserts(type);
 
 		return 0 < update(q("delete-by-uuid+type"), params(uuid, type));
+	}
+
+
+	/* Re-Mapper */
+
+	public static class Remapper<O extends Entity> implements TakeObject
+	{
+		public final Class<O> cls;
+
+		public final Map<String, O> entities =
+		  new LinkedHashMap<>();
+
+		public Remapper(Class<O> cls)
+		{
+			this.cls = EX.assertn(cls);
+		}
+
+		public boolean take(Map<String, Object> m)
+		{
+			//~: get the object json document
+			String json = (String)m.get("json");
+			EX.asserts(json); //?: {not encoded}
+
+			//~: decode the document to object
+			O e = OU.unmap(cls, OU.map(Json.s2o(json)));
+
+			//?: {entity has no uuid}
+			EX.asserts(e.getUuid());
+
+			//?: {wrong uuid}
+			EX.assertx(e.getUuid().equals(m.get("uuid")));
+
+			entities.put(e.getUuid(), e);
+			return false;
+		}
 	}
 
 
