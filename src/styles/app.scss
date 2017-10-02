@@ -1,0 +1,12 @@
+@import "roboto.css";
+@import "icons.css";
+@import "bootstrap";
+@import "application";
+
+
+/* Scripting Support */
+
+[ag-if]:not(.ng-scope)
+{
+  display: none;
+}

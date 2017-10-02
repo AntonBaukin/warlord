@@ -1,0 +1,38 @@
+/* Typography */
+
+$font-family-sans-serif:  Roboto;
+$font-family-serif:       serif;
+$font-family-monospace:   monospace;
+$font-weight-base:        300;
+$headings-font-weight:    400;
+$link-hover-decoration:   none;
+
+
+/* Colors */
+
+$body-bg:                 #111111;
+$alter-bg:                #fff;
+$text-color:              #A0A0A0;
+$text-color-strong:       #e7e7e7;
+$alter-text-color:        #595959;
+$gray-darkest:            #0d0d0d;
+$primary-color:           #4CB5FC;
+$secondary-color:         #34373F;
+$brand-primary:           $primary-color;
+$attention-color:         #f0ad4e;
+$brand-warning:           $attention-color;
+$border-frame-color:      rgba($primary-color, 0.2);
+$well-border:             $border-frame-color;
+$well-bg:                 rgba($primary-color, 0.1);
+$link-color:              $text-color;
+$link-hover-color:        $text-color-strong;
+
+
+
+/* Dimensions */
+
+$main-width:              900px;
+$large-width:             1200px;
+$tablet-width:            480px;
+$border-radius-base:      12px;
+$well-padding:            20px;
