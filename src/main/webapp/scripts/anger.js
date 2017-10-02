@@ -716,7 +716,14 @@ ZeT.scope(angular.module('anger', []), function(anger)
 
 			function f()
 			{
-				scope.$broadcast.apply(scope, data?[x, data]:[x])
+				var a = data?[x, data]:[x]
+				var z = scope[ag('filter-broadcast')]
+
+				//?: {filtered out broadcast call}
+				if(ZeT.isf(z) && (false === z.apply(scope, a)))
+					return
+
+				scope.$broadcast.apply(scope, a)
 			}
 
 			if(!d) f(); else ZeT.timeout(d, f)

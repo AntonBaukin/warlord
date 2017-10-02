@@ -89,13 +89,17 @@ ZeT.scope(angular.module('main', $MODULES), function(module)
 		})
 
 		//~: fixes node width to the current
-		//$scope.fixWidth = function(n, delay)
-		//{
-		//	ZeT.assert(ZeT.isn(delay) && delay >= 0)
-		//	$timeout(function(){ n.css('width', ZeTS.cat(n.outerWidth(), 'px')).addClass('fixed') }, delay)
-		//}
+		$scope.fixWidth = function(n, delay)
+		{
+			ZeT.assert(ZeT.isn(delay) && delay >= 0)
 
-		//~: anchored pages support
+			ZeT.timeout(delay, function(){
+				n.css('width', ZeTS.cat(n.outerWidth(), 'px')).
+				  addClass('fixed')
+			})
+		}
+
+		//~: anchored content support
 		ZeT.scope(function()
 		{
 			function pageHash()
@@ -105,6 +109,10 @@ ZeT.scope(angular.module('main', $MODULES), function(module)
 				if(ZeT.ises(page) || ZeTS.first(page) != '#')
 					return 'main'
 
+				//?: {hash-bang mode}
+				if(ZeTS.starts(page, '#!#'))
+					return page.substring(3)
+
 				return page.substring(1)
 			}
 
@@ -113,32 +121,34 @@ ZeT.scope(angular.module('main', $MODULES), function(module)
 			{
 				ZeT.log('Index page items are fully loaded…')
 
-				ZeT.timeout(10, function()
+				ZeT.timeout(100, function()
 				{
 					$scope.$broadcast('pulsing')
 
-					ZeT.timeout(500, function(){
+					ZeT.timeout(400, function(){
 						$scope.$broadcast('content-' + pageHash())
 					})
 
-					ZeT.timeout(700, function(){
+					ZeT.timeout(600, function(){
 						$scope.$broadcast('pulse')
 					})
 				})
 			})
 
-			//~: catch 'content-*' events
-			//ZeT.each(PAGES, function(p)
-			//{
-			//	$scope.$on('content-' + p, function(){
-			//		window.location.hash = '#' + p
-			//	})
-			//})
+			//~: filter scope click broadcasts
+			$scope.$root.agFilterBroadcast = function(item)
+			{
+				if(!ZeTS.starts(item, 'content-'))
+					return
+
+				var hash = item.substring('content-'.length)
+				window.location.hash = ('hide' == hash)?(''):(hash)
+			}
 		})
 
 		//~: window resize
 		$(window).on('resize', onDocSize)
-		$timeout(onDocSize)
+		$scope.$on('index-is-ready', onDocSize)
 
 		//~: on document size
 		function onDocSize()
@@ -160,6 +170,8 @@ ZeT.scope(angular.module('main', $MODULES), function(module)
 
 				if(!ZeT.ises(t))
 					$scope.$broadcast('win-retarget')
+
+				ZeT.log('Targeting window layout: ', $scope.win.target)
 				$scope.$broadcast('win-' + $scope.win.target)
 
 				$timeout(function(){})

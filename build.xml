@@ -183,12 +183,30 @@
 
   <target name = "styles">
 
-    <exec executable = "node-sass" dir = "src/styles">
+    <!-- sass utility for windows -->
+    <condition property = "node-sass" value = "node-sass.bat">
+      <os family = "windows"/>
+    </condition>
+
+    <!-- sass utility for unix -->
+    <property name = "node-sass" value = "node-sass"/>
+
+    <!-- clean-css utility for windows -->
+    <condition property = "cleancss" value = "cleancss.bat">
+      <os family = "windows"/>
+    </condition>
+
+    <!-- clean-css utility for unix -->
+    <property name = "cleancss" value = "cleancss"/>
+
+    <!-- build styles from sass files -->
+    <exec executable = "${node-sass}" dir = "src/styles">
       <arg value = "app.scss"/>
       <arg value = "app.tmp.css"/>
     </exec>
 
-    <exec executable = "cleancss" dir = "src/styles">
+    <!-- pack-compress all in single file -->
+    <exec executable = "${cleancss}" dir = "src/styles">
       <arg value = "-O2"/>
       <arg value = "-O1"/>
       <arg value = "specialComments:off"/>

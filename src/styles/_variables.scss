@@ -5,6 +5,7 @@ $font-family-serif:       serif;
 $font-family-monospace:   monospace;
 $font-weight-base:        300;
 $headings-font-weight:    400;
+$font-weight-thin:        100;
 $link-hover-decoration:   none;
 
 
@@ -12,7 +13,7 @@ $link-hover-decoration:   none;
 
 $body-bg:                 #111111;
 $alter-bg:                #fff;
-$text-color:              #A0A0A0;
+$text-color:              #c8c8c8;
 $text-color-strong:       #e7e7e7;
 $alter-text-color:        #595959;
 $gray-darkest:            #0d0d0d;
@@ -20,6 +21,7 @@ $primary-color:           #4CB5FC;
 $secondary-color:         #34373F;
 $brand-primary:           $primary-color;
 $attention-color:         #f0ad4e;
+$overflash-color:         #de2510;
 $brand-warning:           $attention-color;
 $border-frame-color:      rgba($primary-color, 0.2);
 $well-border:             $border-frame-color;

@@ -1,1 +1,29 @@
-<section></section>
+
+<!-- Navigation Bar (Desktop) -->
+
+<section class = "mainav glow" ag-if = "!win-retarget win-desktop"
+  ag-class = "{'content-hide': 'glow', 'content-other': '!glow'}">
+
+  <ul ag-trim>
+
+    <i class = "warlord-logo" ag-click = "content-hide content-main" ag-opts = "{up:99}"
+      ><span>WAR</span><span>Lord</span><span>Skeleton</span></i>
+
+    <li class = "menu" ag-click = "content-hide content-departments pulsing+10"
+      ag-opts = "{up:99}" ag-class = "{'content-hide': '!active', 'content-departments': 'active'}">
+      <span ag-init = "$scope.fixWidth($element, 100)">Departments</span>
+    </li>
+
+    <li class = "menu" ag-click = "content-hide content-employees pulsing+10"
+      ag-opts = "{up:99}" ag-class = "{'content-hide': '!active', 'content-employees': 'active'}">
+      <span ag-init = "$scope.fixWidth($element, 100)">Employees</span>
+    </li>
+
+    <li class = "glue"></li>
+
+    <li class = "menu attention" ag-click = "content-hide content-about pulse+150" ag-opts = "{up:99}"
+      ag-class = "{'content-hide': '!active', 'content-about': 'active'}">
+      <span ag-init = "$scope.fixWidth($element, 100)">About this<br>application</span>
+    </li>
+  </ul>
+</section>
