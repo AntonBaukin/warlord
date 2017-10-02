@@ -6,9 +6,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 
 /* Warlord */
@@ -43,17 +41,7 @@ public class DU
 	 */
 	public static Date s2d(String s)
 	{
-		if(SU.ises(s))
-			return null;
-
-		Calendar cl = GregorianCalendar.from(
-		  ZonedDateTime.ofInstant(Instant.parse(s), Z_UTC));
-
-		cl.set(Calendar.HOUR_OF_DAY,  0);
-		cl.set(Calendar.MINUTE,       0);
-		cl.set(Calendar.SECOND,       0);
-		cl.set(Calendar.MILLISECOND,  0);
-
-		return cl.getTime();
+		return SU.ises(s)?(null):
+		  Date.from(Instant.parse(s));
 	}
 }

@@ -8,6 +8,10 @@ import net.java.web.warlord.object.Entity;
 /**
  * Organization department.
  *
+ * Department has optional projection with type
+ * "Department Head" that has empty object and
+ * refers via the owner an Employee.
+ *
  * @author anton.baukin@gmail.com
  */
 public class Department extends Entity
@@ -48,22 +52,6 @@ public class Department extends Entity
 		this.phone = phone;
 	}
 
-	/**
-	 * UUID of the person that is currently
-	 * this department's head.
-	 */
-	public String getHead()
-	{
-		return head;
-	}
-
-	private String head;
-
-	public void setHead(String head)
-	{
-		this.head = head;
-	}
-
 
 	/* Department Mappings */
 
@@ -77,8 +65,5 @@ public class Department extends Entity
 
 		register(Department.class, "phone", o -> o.phone,
 		  (o, v) -> o.phone = (String)v);
-
-		register(Department.class, "head", o -> o.head,
-		  (o, v) -> o.head = (String)v);
 	}
 }

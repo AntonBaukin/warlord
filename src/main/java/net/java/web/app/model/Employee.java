@@ -24,6 +24,7 @@ public class Employee extends Entity
 {
 	/**
 	 * UUID of the department where the employee works.
+	 * The department is the owner (of the object record).
 	 */
 	public String getDepartment()
 	{

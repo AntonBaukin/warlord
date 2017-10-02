@@ -96,6 +96,17 @@ public class GetEmployees
 	{
 		EX.assertx(p != null && e != null);
 
+		//?: {department is set}
+		if(e.getDepartment() != null)
+		{
+			EX.assertu(e.getDepartment());
+
+			//?: {the department record exists}
+			EX.assertx(getObjects.exists(
+			  e.getDepartment(), "Department"
+			));
+		}
+
 		//~: map person first
 		Map<String, Object> m = getObjects.
 		  saveMap(null, EX.assertn(p));
@@ -107,7 +118,8 @@ public class GetEmployees
 		e.setUuid((String) m.get("uuid"));
 
 		//~: save the employee
-		getObjects.save(getObjects.saveMap(null, e));
+		getObjects.save(getObjects.saveMap(
+		  e.getDepartment(), e));
 
 		return e.getUuid();
 	}

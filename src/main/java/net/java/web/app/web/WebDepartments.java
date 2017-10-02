@@ -79,6 +79,26 @@ public class WebDepartments
 		return this.get((String) m.get("uuid"));
 	}
 
+	/**
+	 * Assigns or revokes the Department head employee
+	 * and returns back the department document.
+	 *
+	 * Takes {
+	 *   uuid: department UUID,
+	 *   employee: employee UUID or null
+	 * }
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/update/department-head",
+	  method = RequestMethod.POST)
+	public Object head(@RequestBody Map<String, Object> m)
+	{
+		getDeps.setHead((String) m.get("uuid"),
+		  (String) m.get("employee"));
+
+		return this.get((String) m.get("uuid"));
+	}
+
 	@Autowired
 	protected GetDepartments getDeps;
 }
