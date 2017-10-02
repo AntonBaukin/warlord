@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.GZIPOutputStream;
 
 /* Spring Framework */
 
@@ -128,14 +129,23 @@ public class MappedMessageConverter
 	{
 		try(BytesStream bs = new BytesStream())
 		{
+			GZIPOutputStream gz = new GZIPOutputStream(bs);
+
 			//~: json-encode the object to bytes
-			Json.o2s(obj, bs);
+			Json.o2s(obj, gz);
+
+			//~: flush zip stream
+			bs.setNotCloseNext(true);
+			gz.close();
 
 			//=: content type
 			o.getHeaders().setContentType(JS);
 
 			//=: content length
 			o.getHeaders().setContentLength(bs.length());
+
+			//=: content encoding
+			o.getHeaders().add("Content-Encoding", "gzip");
 
 			//~: expires now & no cache
 			o.getHeaders().setExpires(0L);
