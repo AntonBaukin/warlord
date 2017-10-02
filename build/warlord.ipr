@@ -159,6 +159,13 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
   </component>
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/../src/main/webapp" value="file://$PROJECT_DIR$/../src/main/webapp" />
+      </map>
+    </option>
+  </component>
   <component name="libraryTable">
     <library name="Compile">
       <CLASSES>

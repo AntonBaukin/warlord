@@ -170,4 +170,35 @@
       pattern = "${libs-sources}/[artifact]-[revision].[ext]"/>
   </target>
 
+
+  <!-- ====[ § Styles and Scripts via Node.js Utilities ]==== -->
+
+  <!--
+       Note that this tasks are for the development stages only.
+       Node.js (NPM of Node-Sass) is not required to build the
+       Java Web application iteself.
+  -->
+
+  <!-- § creates overall style-sheet -->
+
+  <target name = "styles">
+
+    <exec executable = "node-sass" dir = "src/styles">
+      <arg value = "app.scss"/>
+      <arg value = "app.tmp.css"/>
+    </exec>
+
+    <exec executable = "cleancss" dir = "src/styles">
+      <arg value = "-O2"/>
+      <arg value = "-O1"/>
+      <arg value = "specialComments:off"/>
+      <arg value = "-o"/>
+      <arg value = "app.css"/>
+      <arg value = "app.tmp.css"/>
+    </exec>
+
+    <delete file = "src/styles/app.tmp.css"/>
+    <move file = "src/styles/app.css" todir = "src/main/webapp"/>
+  </target>
+
 </project>

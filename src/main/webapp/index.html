@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html ng-app = "main">
+<head>
+  <meta charset = "utf-8"/>
+  <meta http-equiv = "Content-Type" content = "text/html;charset=UTF-8"/>
+  <meta name = "viewport" content = "width=device-width, initial-scale=1, maximum-scale=4"/>
+
+  <link rel = "stylesheet" type = "text/css" href = "app.css">
+
+  <script type = "application/javascript" src = "scripts/jquery.min.js"></script>
+  <script type = "application/javascript" src = "scripts/angular.min.js"></script>
+  <script type = "application/javascript" src = "scripts/zet.js"></script>
+  <script type = "application/javascript" src = "scripts/anger.js"></script>
+  <script type = "application/javascript" src = "scripts/content.js"></script>
+  <script type = "application/javascript" src = "scripts/app.js"></script>
+
+  <title></title> <!-- Content.title -->
+</head>
+<body ng-controller = "root" class = "{{win.target}}" ag-pulse = "index-is-ready"
+  ag-class = "{'menu-expand': '~menu-expanded', pulsing: 'pulsing=1000'}">
+
+  <ng-include src = "'pages/main.html'"
+    onload = "pageLoaded('main', 1, 4)"></ng-include>
+
+  <ng-include src = "'pages/menu.html'"
+    onload = "pageLoaded('menu', 2, 4)"></ng-include>
+
+  <ng-include src = "'pages/departments.html'"
+    onload = "pageLoaded('departments', 3, 4)"></ng-include>
+
+  <ng-include src = "'pages/employees.html'"
+    onload = "pageLoaded('employees', 4, 4)"></ng-include>
+</body>
