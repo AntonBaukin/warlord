@@ -85,6 +85,9 @@ public abstract class Entity implements Unmapped
 	 */
 	public void unmap(Map<String, Object> vs)
 	{
+		if(vs == null) //?: {got nothing}
+			return;
+
 		//c: for each class-interface up the hierarchy
 		OU.up(this.getClass(), c ->
 		{

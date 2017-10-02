@@ -267,8 +267,8 @@ public class GetObjects extends GetBase
 		Map<String, Object> m = new LinkedHashMap<>();
 
 		//~: generate new uuid
-		EX.assertx(e != null && e.getUuid() == null);
-		e.setUuid(this.newUUID());
+		if(EX.assertn(e).getUuid() == null)
+			e.setUuid(this.newUUID());
 
 		//=: uuid
 		m.put("uuid", e.getUuid());

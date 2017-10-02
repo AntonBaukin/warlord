@@ -65,7 +65,11 @@ public class MapBuilder implements Mapped
 		if(v instanceof Mapped)
 			v = ((Mapped)v).map();
 
-		map.put(EX.asserts(k), v);
+		if(v == null)
+			map.remove(EX.asserts(k));
+		else
+			map.put(EX.asserts(k), v);
+
 		return this;
 	}
 
