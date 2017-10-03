@@ -18,12 +18,12 @@
 
 // Components
 //@import "mixins/alerts";
-//@import "mixins/buttons";
+@import "mixins/buttons";
 //@import "mixins/panels";
 //@import "mixins/pagination";
 //@import "mixins/list-group";
 //@import "mixins/nav-divider";
-//@import "mixins/forms";
+@import "mixins/forms";
 //@import "mixins/progress-bar";
 //@import "mixins/table-row";
 
@@ -36,5 +36,5 @@
 @import "mixins/clearfix";
 @import "mixins/center-block";
 //@import "mixins/nav-vertical-align";
-//@import "mixins/grid-framework";
-//@import "mixins/grid";
+@import "mixins/grid-framework";
+@import "mixins/grid";

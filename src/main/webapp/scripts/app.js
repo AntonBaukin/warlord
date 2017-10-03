@@ -4,7 +4,7 @@
 
 var $MODULES = [ 'ngSanitize', 'anger' ]
 
-ZeT.scope(angular.module('main', $MODULES), function(module)
+ZeT.scope(angular.module('main', $MODULES), function(main)
 {
 	var anger = angular.module('anger')
 
@@ -32,8 +32,73 @@ ZeT.scope(angular.module('main', $MODULES), function(module)
 		  '; font 10px — is ', m, 'px')
 	})
 
+	/**
+	 * Global data map contains objects mapped by UUIDs
+	 * loaded from the server and left in the memory.
+	 *
+	 * If reload flag is not set, and the data are
+	 * available, the callback is invoked immediately,
+	 * and the data are updated in the background.
+	 *
+	 * If instead of callback function an array is given,
+	 * the objects are replaced without the server call.
+	 */
+	var globalData = {}, globalDataMap = {}
+	function loadData(/* [reload], url, f || a */)
+	{
+		var a = arguments, r = a[0], u = a[1], f = a[2]
+		if(!ZeT.isb(r)) { f = u; u = r; r = false }
+		ZeT.assert(!ZeT.ises(u) && (ZeT.isf(f) || ZeT.isa(f)))
+
+		function replaceData(data)
+		{
+			//~: previous version
+			var x = globalData[u], ids = (x)?{}:(null)
+
+			//~: assign the new
+			globalData[u] = data
+
+			//~: map the ids
+			ZeT.each(data, function(o) {
+				if(ids) ids[o.uuid] = true
+				globalDataMap[o.uuid] = o
+			})
+
+			//~: remove obsolete mappings
+			ZeT.each(x, function(o) {
+				if(o.uuid && !ids[o.uuid])
+					delete globalDataMap[o.uuid]
+			})
+		}
+
+		if(ZeT.isa(f)) //?: {has direct data}
+			return replaceData(f)
+
+		//?: {has no data for immediate answer}
+		if(r === true && globalData[u])
+			f.call(this, globalData[u])
+		else
+		{
+			delete globalData[u] //<-- delete obsolete data
+			r = false //<-- mark as no call
+		}
+
+		//~: (always) load the requested data
+		AppData.get(u, function(obj)
+		{
+			if(ZeT.iso(obj)) //?: {is error}
+				return f.call(this)
+
+			//~: replaced the cached data
+			replaceData(obj)
+
+			//?: {call the functor now}
+			if(!r) f.call(this, obj)
+		})
+	}
+
 	//~: root controller
-	module.controller('root', function($scope, $element, $timeout, $sanitize)
+	main.controller('root', function($scope, $element, $timeout, $sanitize)
 	{
 		ZeT.extend($scope, {
 
@@ -177,5 +242,38 @@ ZeT.scope(angular.module('main', $MODULES), function(module)
 				$timeout(function(){})
 			}
 		}
+
+		//~: set the document title
+		$(document).ready(function(){
+			$(document).find('head > title').text($scope.Content.title)
+		})
+
+	})
+
+	/**
+	 * Default content view routines.
+	 */
+	function setupDefaults($scope, $element, opts)
+	{
+		opts = opts || {}
+		$scope.view = {}
+	}
+
+	//~: departments controller
+	main.controller('depsCtrl', function($scope, $element)
+	{
+		setupDefaults($scope, $element)
+
+		//~: load the data
+		$scope.$on('content-departments', $scope.initScope = function()
+		{
+			loadData('/get/departments', function(objs)
+			{
+				ZeT.log('Loaded departments ', objs)
+
+				$scope.filtered = objs
+				$scope.safeApply()
+			})
+		})
 	})
 })

@@ -132,13 +132,13 @@ public class Person extends Entity
 
 	static
 	{
-		register(Person.class, "last-name", o -> o.lastName,
+		register(Person.class, "lastName", o -> o.lastName,
 		  (o, v) -> o.lastName = (String)v);
 
-		register(Person.class, "first-name", o -> o.firstName,
+		register(Person.class, "firstName", o -> o.firstName,
 		  (o, v) -> o.firstName = (String)v);
 
-		register(Person.class, "middle-name", o -> o.middleName,
+		register(Person.class, "middleName", o -> o.middleName,
 		  (o, v) -> o.middleName = (String)v);
 
 		register(Person.class, "sex",

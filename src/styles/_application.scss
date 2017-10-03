@@ -54,7 +54,7 @@ b, strong
   {
     font-size: $font-size-h5;
     line-height: $font-size-h5 * 1.1;
-    letter-spacing: 0.15px;
+    letter-spacing: 0.25px;
   }
 
   @media (min-width : $main-width)
@@ -62,7 +62,7 @@ b, strong
     font-weight: 100;
     font-size: $font-size-h4;
     line-height: $font-size-h4 * 1.1;
-    letter-spacing: 0.25px;
+    letter-spacing: 0.75px;
   }
 }
 
@@ -134,6 +134,91 @@ b, strong
   left: 50%;
   margin-left: -$width * 0.5;
   width: $width;
+}
+
+@mixin clearfix()
+{
+  &::before, &::after
+  {
+    content: " ";
+    display: table;
+  }
+
+  &::after
+  {
+    clear: both;
+  }
+}
+
+table
+{
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  td
+  {
+    padding: 0;
+    border: none;
+  }
+}
+
+
+/* Buttons & Forms */
+
+.btn
+{
+  @include pointer;
+
+  font-size: $font-size-base * 1.1;
+
+  &:hover, &:focus, &.focus
+  {
+    color: $primary-color;
+
+    &.btn-primary
+    {
+      color: $btn-primary-color;
+    }
+
+    &.btn-success
+    {
+      color: $btn-success-color;
+    }
+
+    &.btn-info
+    {
+      color: $btn-info-color;
+    }
+
+    &.btn-warning
+    {
+      color: $btn-warning-color;
+    }
+
+    &.btn-danger
+    {
+      color: $btn-danger-color;
+    }
+  }
+}
+
+form
+{
+  label
+  {
+    font-weight: $font-weight-thin;
+  }
+
+  .form-control
+  {
+    font-weight: $font-weight-base;
+
+    &[disabled],  &[readonly], fieldset[disabled]
+    {
+      border-color: $input-border-disabled;
+    }
+  }
 }
 
 
@@ -247,6 +332,126 @@ body.desktop .mainav
       {
         width: 100%;
         padding: 0;
+      }
+    }
+  }
+}
+
+
+/* Content Page (General, Desktop) */
+
+section.content.page
+{
+  @include abscroll;
+  top: $nav-height-desktop;
+
+  > .content-wrapper
+  {
+    position: relative;
+    overflow: hidden;
+    margin-top: $font-size-h3;
+
+    @media (min-width : $main-width)
+    {
+      left: 50%;
+      width: $main-width;
+      margin-left: -$main-width * 0.5;
+    }
+
+    > .section-list-repeated
+    {
+      @include clearfix;
+      display: block;
+
+      background-color: $well-bg;
+      color: $well-text-color;
+      padding: 0.75 * $font-size-base $font-size-base;
+
+      & + .section-list-repeated
+      {
+        margin-top: $font-size-base;
+      }
+
+      > .compacted.line
+      {
+        position: relative;
+
+        > div
+        {
+          font-size: $font-size-h4;
+          line-height: $font-size-h4;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        > .icons
+        {
+          display: inline-block;
+          position: absolute;
+          right: -$font-size-base;
+          top: -0.75 * $font-size-base;
+          bottom: -0.75 * $font-size-base;
+          white-space: nowrap;
+          background-color: $well-bg;
+
+          > table
+          {
+            height: 100%;
+          }
+        }
+      }
+
+      > .expanded.block
+      {
+        label
+        {
+          font-size: $font-size-h5 * 1.1;
+          letter-spacing: 0.75px;
+        }
+
+        .form-control
+        {
+          font-size: $font-size-h5 * 1.22;
+        }
+
+        > .buttons
+        {
+          @include clearfix;
+          margin-top: $font-size-h5 * 1.44;
+
+          > div
+          {
+            display: inline-block;
+          }
+
+          .left
+          {
+            float: left;
+          }
+
+          .right
+          {
+            float: right;
+          }
+
+          .btn + .btn
+          {
+            margin-left: $font-size-h5;
+          }
+        }
+      }
+
+      &.odd
+      {
+        background-color: $well-bg-odd;
+
+        > .compacted.line
+        {
+          > .icons
+          {
+            background-color: $well-bg-odd;
+          }
+        }
       }
     }
   }

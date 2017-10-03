@@ -1,1 +1,73 @@
-<section></section>
+
+<!-- Departments List -->
+
+<section class = "content page" ng-controller = "depsCtrl"
+  ag-if = "!content-hide content-departments"
+  ag-init = "$scope.initScope()">
+
+  <div class = "content-wrapper">
+    <div ng-repeat = "o in filtered track by o.uuid"
+      class = "section-list-repeated department"
+      ng-class = "{odd: $odd}">
+
+      <div class = "compacted line" ng-if = "view.see != o.uuid">
+        <div class = "icons">
+          <table><tr><td><span class = "btn btn-icon" ng-click = "view.see = o.uuid"
+            ><i class = "fa fa-eye"></i></span></td></tr></table>
+        </div>
+        <div class = "name">{{o.name}}</div>
+      </div>
+
+      <form class = "expanded block" ng-if = "view.see == o.uuid">
+        <div class = "form-group">
+          <label>Department name</label>
+          <input type = "text" class = "form-control" ng-model = "o.name">
+        </div>
+
+        <div class = "row">
+          <div class = "col-md-6 col-sm-12">
+            <div class = "form-group">
+              <label>Office</label>
+              <input type = "text" class = "form-control" ng-model = "o.office">
+            </div>
+          </div>
+
+          <div class = "col-md-6 col-sm-12">
+            <div class = "form-group">
+              <label>Phone</label>
+              <input type = "text" class = "form-control" ng-model = "o.phone">
+            </div>
+          </div>
+        </div>
+
+        <div class = "row">
+          <div class = "col-sm-8">
+            <div class = "form-group">
+              <label>Head</label>
+              <input type = "text" class = "form-control" readonly ng-value = "o.head.lastName">
+            </div>
+          </div>
+
+          <div class = "col-sm-4">
+            <div class = "form-group">
+              <label>Since</label>
+              <input type = "text" class = "form-control" readonly ng-value = "o.head.since">
+            </div>
+          </div>
+        </div>
+
+        <div ag-trim class = "buttons">
+          <div class = "left">
+            <button class = "btn btn-default" ng-click = "view.see = null">Close</button>
+            <button class = "btn btn-info">View Employees</button>
+          </div>
+
+          <div class = "right">
+            <button class = "btn btn-warning">Select Head</button>
+            <button class = "btn btn-success">Commit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
