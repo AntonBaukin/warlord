@@ -15,7 +15,7 @@ body
   cursor: if($type == none, default, auto);
 }
 
-body *
+body *:not(input)
 {
   @include user-select(none);
 }
@@ -203,6 +203,24 @@ table
   }
 }
 
+@mixin field-placeholder()
+{
+  &::-moz-placeholder
+  {
+    @content;
+  }
+
+  &::-webkit-input-placeholder
+  {
+    @content;
+  }
+
+  &:-ms-input-placeholder
+  {
+    @content;
+  }
+}
+
 form
 {
   label
@@ -217,6 +235,10 @@ form
     &[disabled],  &[readonly], fieldset[disabled]
     {
       border-color: $input-border-disabled;
+    }
+
+    @include field-placeholder() {
+      font-style: italic;
     }
   }
 }

@@ -21,7 +21,8 @@
       <form class = "expanded block" ng-if = "view.see == o.uuid">
         <div class = "form-group">
           <label>Department name</label>
-          <input type = "text" class = "form-control" ng-model = "o.name">
+          <input type = "text" class = "form-control" ng-model = "o.name"
+            placeholder = "Set department name that is required…">
         </div>
 
         <div class = "row">
@@ -44,14 +45,15 @@
           <div class = "col-sm-8">
             <div class = "form-group">
               <label>Head</label>
-              <input type = "text" class = "form-control" readonly ng-value = "o.head.lastName">
+              <input type = "text" class = "form-control" readonly ng-value = "headName(o)">
             </div>
           </div>
 
           <div class = "col-sm-4">
             <div class = "form-group">
               <label>Since</label>
-              <input type = "text" class = "form-control" readonly ng-value = "o.head.since">
+              <input type = "text" class = "form-control" readonly
+                 ng-value = "o.head.since | date : 'MMMM d, yyyy' : 'UTC'">
             </div>
           </div>
         </div>
@@ -59,11 +61,11 @@
         <div ag-trim class = "buttons">
           <div class = "left">
             <button class = "btn btn-default" ng-click = "view.see = null">Close</button>
-            <button class = "btn btn-info">View Employees</button>
+            <button class = "btn btn-info">View employees</button>
           </div>
 
           <div class = "right">
-            <button class = "btn btn-warning">Select Head</button>
+            <button class = "btn btn-warning">Select head</button>
             <button class = "btn btn-success">Commit</button>
           </div>
         </div>

@@ -36,26 +36,91 @@ ZeT.extend(AppData,
 		ZeT.log('Get demo data: ', url, ps)
 
 		if(url == '/get/departments')
-			return this.get$deps()
+			return ZeT.deepClone(this.get$deps())
 
+		if(url == '/get/employees')
+			return ZeT.deepClone(this.get$emps())
 	},
 
 	get$deps         : function()
 	{
 		if(this.data$deps)
-			return ZeT.deepClone(this.data$deps)
+			return this.data$deps
+
+		function office()
+		{
+			var a = this.$a('123456789', 1)
+			var b = this.$a('0123456789', this.$n(2))
+			var c = this.$bool(4)?this.$a('ABCDEF', 1):''
+			return ZeTS.cat(a, b, c)
+		}
 
 		var self = this, deps = this.data$deps = []
 
+		//~: generate departments
 		this.$times(5, function()
 		{
 			deps.push({
-				uuid: self.uuid(),
-				name: self.$cap(self.$words(5))
+				uuid   : self.uuid(),
+				name   : self.$cap(self.$words(5)),
+				phone  : self.$phone(),
+				office : office.call(self)
 			})
 		})
 
-		return ZeT.deepClone(this.data$deps)
+		//~: generate employees
+		var emps = this.get$emps()
+
+		//~: select head & set department
+		ZeT.each(emps, function(e)
+		{
+			var d = self.$a(deps, 1)[0]
+
+			//=: work in this department
+			e.employee.department = d.uuid
+
+			//?: {make it head}
+			if(!d.head || self.$bool(3))
+				d.head = {
+					employee : e.uuid,
+					since    : self.$date(-365).toISOString()
+				}
+		})
+
+		return this.data$deps
+	},
+
+	get$emps         : function()
+	{
+		if(this.data$emps)
+			return this.data$emps
+
+		var self = this, emps = this.data$emps = []
+
+		//~: generate employees
+		this.$times(35, function()
+		{
+			var e; emps.push(e = {
+				uuid       : self.uuid(),
+				lastName   : self.$cap(self.$words(1)),
+				firstName  : self.$cap(self.$words(1)),
+				phone      : self.$phone(),
+				email      : self.$email(),
+
+				employee   : {
+				  phone    : self.$phone(),
+				  email      : self.$email()
+				}
+			})
+
+			if(self.$bool(3))
+				e.middleName = self.$cap(self.$words(1))
+
+			if(!self.$bool(5))
+				e.sex = self.$bool()?'M':'F'
+		})
+
+		return this.data$emps
 	},
 
 	/**
@@ -85,6 +150,7 @@ ZeT.extend(AppData,
 
 	$n               : function(m, M)
 	{
+		if(arguments.length == 1) { M = m; m = 0 }
 		return m + Math.floor(Math.random() * (1 + M - m))
 	},
 
@@ -100,11 +166,11 @@ ZeT.extend(AppData,
 	},
 
 	/**
-	 * Returns n unique items of the array.
+	 * Returns n unique randomly selected items of the array-like.
 	 */
 	$au              : function(a, n)
 	{
-		ZeT.assert(ZeT.isa(a))
+		ZeT.assert(ZeT.isi(a.length) && a.length > 0)
 		ZeT.assert(ZeT.isi(n) && n > 0)
 		if(a.length < n) n = a.length
 
@@ -138,14 +204,63 @@ ZeT.extend(AppData,
 		return r
 	},
 
-	$words           : function(up)
+	/**
+	 * Returns n randomly selected items of the array-like.
+	 */
+	$a               : function(a, n)
+	{
+		ZeT.assert(ZeT.isi(a.length) && a.length > 0)
+		ZeT.assert(ZeT.isi(n) && n >= 0)
+
+		for(var r = [], i = 0;(i < n);i++)
+			r.push(a[Math.floor(Math.random() *a.length)])
+
+		return r
+	},
+
+	$words           : function(up, from)
 	{
 		return this.$au(this.WORDS, this.$n(1, up)).join(' ')
+	},
+
+	$phone           : function()
+	{
+		var D = '0123456789'
+		return ZeTS.cat('+1-', this.$a(D, 3), '-', this.$a(D, 7))
+	},
+
+	$email           : function()
+	{
+		return ZeTS.cat(
+		  ZeTS.catsep(this.$bool()?'.':'_', this.$words(2).split(' ')),
+		  '@', ZeTS.catsep('.', this.$words(2).split(' '), 'com')
+		)
 	},
 
 	$cap             : function(s)
 	{
 		return ZeTS.first(s).toUpperCase() + s.substring(1)
+	},
+
+	$bool            : function(n)
+	{
+		return Math.random() < (1 / ((n || 1) + 1))
+	},
+
+	/**
+	 * Creates date shifted [0, n) days from the
+	 * given point, or default this day.
+	 */
+	$date            : function(n, at)
+	{
+		var d = ZeT.isu(at)?(new Date()):
+		  ZeT.isn(at)?(new Date(at)):(new Date(at.getTime()))
+
+		d.setUTCHours(0, 0, 0, 0)
+		n = AppData.$n(1, n || 7)
+		d.setDate(d.getDate() + n)
+
+		return d
 	},
 
 	WORDS            : ['the','name','very','through','and','just','form','much','great','think','you','say','that','help','low','was','line','for','before','turn','are','cause','with','same','mean','differ','his','move','they','right','boy','old','one','too','have','does','this','tell','from','sentence','set','had','three','want','hot','air','but','well','some','also','what','play','there','small','end','can','put','out','home','other','read','were','hand','all','port','your','large','when','spell','add','use','even','word','land','how','here','said','must','big','each','high','she','such','which','follow','act','their','why','time','ask','men','will','change','way','went','about','light','many','kind','then','off','them','need','would','house','write','picture','like','try','these','again','her','animal','long','point','make','mother','thing','world','see','near','him','build','two','self','has','earth','look','father','more','head','day','stand','could','own','page','come','should','did','country','found','sound','answer','school','most','grow','number','study','who','still','over','learn','know','plant','water','cover','than','food','call','sun','first','four','people','thought','may','let','down','keep','side','eye','been','never','now','last','find','door','any','between','new','city','work','tree','part','cross','take','since','get','hard','place','start','made','might','live','story','where','saw','after','far','back','sea','little','draw','only','left','round','late','man','run','year','came','while','show','press','every','close','good','night','real','give','life','our','few','under','stop','Rank','Word','Rank','Word','open','ten','seem','simple','together','several','next','vowel','white','toward','children','war','begin','lay','got','against','walk','pattern','example','slow','ease','center','paper','love','often','person','always','money','music','serve','those','appear','both','road','mark','map','book','science','letter','rule','until','govern','mile','pull','river','cold','car','notice','feet','voice','care','fall','second','power','group','town','carry','fine','took','certain','rain','fly','eat','unit','room','lead','friend','cry','began','dark','idea','machine','fish','note','mountain','wait','north','plan','once','figure','base','star','hear','box','horse','noun','cut','field','sure','rest','watch','correct','color','able','face','pound','wood','done','main','beauty','enough','drive','plain','stood','girl','contain','usual','front','young','teach','ready','week','above','final','ever','gave','red','green','list','though','quick','feel','develop','talk','sleep','bird','warm','soon','free','body','minute','dog','strong','family','special','direct','mind','pose','behind','leave','clear','song','tail','measure','produce','state','fact','product','street','black','inch','short','lot','numeral','nothing','class','course','wind','stay','question','wheel','happen','full','complete','force','ship','blue','area','object','half','decide','rock','surface','order','deep','fire','moon','south','island','problem','foot','piece','yet','told','busy','knew','test','pass','record','farm','boat','top','common','whole','gold','king','possible','size','plane','heard','age','best','dry','hour','wonder','better','laugh','true','thousand','during','ago','hundred','ran','check','remember','game','step','shape','early','yes','hold','hot','west','miss','ground','brought','interest','heat','reach','snow','fast','bed','five','bring','sing','sit','listen','perhaps','six','fill','table','east','travel','weight','less','language','morning','among'],

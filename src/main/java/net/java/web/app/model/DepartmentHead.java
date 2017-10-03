@@ -21,16 +21,16 @@ public class DepartmentHead extends Entity
 	 * UUID of Employee that is currently
 	 * this department's head.
 	 */
-	public String getHead()
+	public String getEmployee()
 	{
-		return head;
+		return employee;
 	}
 
-	private String head;
+	private String employee;
 
-	public void setHead(String head)
+	public void setEmployee(String employee)
 	{
-		this.head = head;
+		this.employee = employee;
 	}
 
 	/**
@@ -53,8 +53,8 @@ public class DepartmentHead extends Entity
 
 	static
 	{
-		register(DepartmentHead.class, "head", o -> o.head,
-		  (o, v) -> o.head = (String)v);
+		register(DepartmentHead.class, "employee", o -> o.employee,
+		  (o, v) -> o.employee = (String)v);
 
 		register(DepartmentHead.class, "since", o -> DU.ts(o.since),
 		  (o, v) -> o.since = DU.s2d((String)v));

@@ -136,7 +136,7 @@ public class GetDepartments
 		h.setUuid(dep);
 
 		//=: head employee
-		h.setHead(emp);
+		h.setEmployee(emp);
 
 		//=: since this date
 		h.setSince(new java.util.Date());

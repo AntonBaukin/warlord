@@ -267,13 +267,31 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		//~: load the data
 		$scope.$on('content-departments', $scope.initScope = function()
 		{
-			loadData('/get/departments', function(objs)
+			loadData('/get/departments', function(deps)
 			{
-				ZeT.log('Loaded departments ', objs)
+				ZeT.log('Loaded departments ', deps)
 
-				$scope.filtered = objs
-				$scope.safeApply()
+				loadData('/get/employees', function(emps)
+				{
+					$scope.filtered = deps
+
+					ZeT.log('Loaded employees ', emps)
+					$scope.safeApply()
+				})
 			})
 		})
+
+		//~: get head employee full name
+		$scope.headName = function(d)
+		{
+			//~: employee uuid
+			var e = ZeT.get(d, 'head', 'employee')
+			if(ZeT.ises(e)) return
+
+			//~: loaded employee object
+			e = ZeT.assertn(globalDataMap[e])
+
+			return ZeTS.catsep(' ', e.firstName, e.middleName, e.lastName)
+		}
 	})
 })
