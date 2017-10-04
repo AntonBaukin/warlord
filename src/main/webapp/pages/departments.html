@@ -1,27 +1,28 @@
 
 <!-- Departments List -->
 
-<section class = "content page" ng-controller = "depsCtrl"
-  ag-if = "!content-hide content-departments"
+<section class = "content page invisible" ng-controller = "depsCtrl"
+  ag-class = "{'content-hide': 'invisible', 'content-departments': '!invisible'}"
   ag-init = "$scope.initScope()">
 
   <div class = "content-wrapper">
-    <div ng-repeat = "o in filtered track by o.uuid"
+    <div ng-repeat-start = "d in filtered track by d.uuid"
       class = "section-list-repeated department"
       ng-class = "{odd: $odd}">
 
-      <div class = "compacted line" ng-if = "view.see != o.uuid">
+      <div class = "compacted line" ng-if = "view.dep != d.uuid">
         <div class = "icons">
-          <table><tr><td><span class = "btn btn-icon" ng-click = "view.see = o.uuid"
+          <table><tr><td><span class = "btn btn-icon"
+            ng-click = "view.dep = d.uuid; view.emps = null"
             ><i class = "fa fa-eye"></i></span></td></tr></table>
         </div>
-        <div class = "name">{{o.name}}</div>
+        <div class = "name">{{d.name}}</div>
       </div>
 
-      <form class = "expanded block" ng-if = "view.see == o.uuid">
+      <form class = "expanded block" ng-if = "view.dep == d.uuid">
         <div class = "form-group">
           <label>Department name</label>
-          <input type = "text" class = "form-control" ng-model = "o.name"
+          <input type = "text" class = "form-control" ng-model = "d.name"
             placeholder = "Set department name that is required…">
         </div>
 
@@ -29,14 +30,14 @@
           <div class = "col-md-6 col-sm-12">
             <div class = "form-group">
               <label>Office</label>
-              <input type = "text" class = "form-control" ng-model = "o.office">
+              <input type = "text" class = "form-control" ng-model = "d.office">
             </div>
           </div>
 
           <div class = "col-md-6 col-sm-12">
             <div class = "form-group">
               <label>Phone</label>
-              <input type = "text" class = "form-control" ng-model = "o.phone">
+              <input type = "text" class = "form-control" ng-model = "d.phone">
             </div>
           </div>
         </div>
@@ -45,7 +46,7 @@
           <div class = "col-sm-8">
             <div class = "form-group">
               <label>Head</label>
-              <input type = "text" class = "form-control" readonly ng-value = "headName(o)">
+              <input type = "text" class = "form-control" readonly ng-value = "headName(d)">
             </div>
           </div>
 
@@ -53,15 +54,17 @@
             <div class = "form-group">
               <label>Since</label>
               <input type = "text" class = "form-control" readonly
-                 ng-value = "o.head.since | date : 'MMMM d, yyyy' : 'UTC'">
+                 ng-value = "d.head.since | date : 'MMMM d, yyyy' : 'UTC'">
             </div>
           </div>
         </div>
 
         <div ag-trim class = "buttons">
           <div class = "left">
-            <button class = "btn btn-default" ng-click = "view.see = null">Close</button>
-            <button class = "btn btn-info">View employees</button>
+            <button ng-click = "view.dep = view.emps = null"
+              class = "btn btn-default">Close</button>
+            <button ng-click = "view.emps = (view.emps == d.uuid)?(null):(d.uuid)"
+              class = "btn btn-info">View employees</button>
           </div>
 
           <div class = "right">
@@ -71,5 +74,21 @@
         </div>
       </form>
     </div>
+
+    <!-- list the persons of this department -->
+    <div ng-repeat = "e in listDepEmps(d) track by e.uuid"
+      class = "section-list-repeated inner alter employee"
+      ng-class = "{odd: $odd}">
+
+      <div class = "compacted line">
+        <div class = "icons">
+          <table><tr><td><span class = "btn btn-icon"
+            ><i class = "fa fa-eye"></i></span></td></tr></table>
+        </div>
+        <div class = "name">{{personName(e)}}</div>
+      </div>
+    </div>
+
+    <div class = "section-list-sep" ng-repeat-end></div>
   </div>
 </section>

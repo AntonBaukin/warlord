@@ -171,6 +171,8 @@ table
   @include pointer;
 
   font-size: $font-size-base * 1.1;
+  padding-top: $padding-base-vertical - 2px;
+  padding-bottom: $padding-base-vertical - 2px;
 
   &:hover, &:focus, &.focus
   {
@@ -389,9 +391,21 @@ section.content.page
       color: $well-text-color;
       padding: 0.75 * $font-size-base $font-size-base;
 
-      & + .section-list-repeated
+      & + .section-list-repeated, & + .section-list-sep
       {
         margin-top: $font-size-base;
+      }
+
+      & + .section-list-sep
+      {
+        height: 0;
+        overflow: hidden;
+      }
+
+      &.inner
+      {
+        margin-left: 2 * $font-size-base;
+        margin-right: 2 * $font-size-base;
       }
 
       > .compacted.line
@@ -463,17 +477,32 @@ section.content.page
         }
       }
 
-      &.odd
+      @mixin else-bg($bg)
       {
-        background-color: $well-bg-odd;
+        background-color: $bg;
 
         > .compacted.line
         {
           > .icons
           {
-            background-color: $well-bg-odd;
+            background-color: $bg;
           }
         }
+      }
+
+      &.odd
+      {
+        @include else-bg($well-bg-odd)
+      }
+
+      &.alter
+      {
+        @include else-bg($well-bg-alter)
+      }
+
+      &.alter.odd
+      {
+        @include else-bg($well-bg-alter-odd)
       }
     }
   }
