@@ -95,6 +95,16 @@ ZeT.extend(AppData,
 		if(this.data$emps)
 			return this.data$emps
 
+		var ADDRESSES = ZeT.s2o(this.ADDRESSES)
+
+		function address()
+		{
+			var a = this.$a(ADDRESSES, 1)[0]
+			return ZeTS.catsep(', ', ZeTS.catsep(' ', a.building, a.street),
+			  ZeTS.catsep(' ', a.settlement, a.province), a.index
+			)
+		}
+
 		var self = this, emps = this.data$emps = []
 
 		//~: generate employees
@@ -106,10 +116,13 @@ ZeT.extend(AppData,
 				firstName  : self.$cap(self.$words(1)),
 				phone      : self.$phone(),
 				email      : self.$email(),
+				dob        : self.$date(-365 * 50).toISOString(),
+				address    : address.call(self),
 
 				employee   : {
 				  phone    : self.$phone(),
-				  email      : self.$email()
+				  email    : self.$email(),
+				  hired    : self.$date(-365 * 2).toISOString()
 				}
 			})
 

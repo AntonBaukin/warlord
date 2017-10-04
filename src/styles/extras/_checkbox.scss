@@ -1,0 +1,115 @@
+// Flatlogic, https://github.com/flatlogic
+// https://github.com/flatlogic/awesome-bootstrap-checkbox/blob/master/awesome-bootstrap-checkbox.scss
+
+$font-family-awesome: 'FontAwesome' !default;
+$fa-var-check: "\f00c" !default;
+$check-icon: $fa-var-check !default;
+
+.checkbox {
+  padding-left: 20px;
+
+  label{
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    padding-left: 5px;
+
+    &::before{
+      content: "";
+      display: inline-block;
+      position: absolute;
+      width: 19px;
+      height: 19px;
+      left: 0;
+      margin-left: -20px;
+      margin-top: 1px;
+      border: 1px solid $input-border;
+      border-radius: 3px;
+      background-color: $input-bg;
+      @include transition(border 0.15s ease-in-out, color 0.15s ease-in-out);
+    }
+
+    &::after{
+      display: inline-block;
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 0;
+      top: 0;
+      margin-left: -19px;
+      margin-top: 2px;
+      padding-left: 3px;
+      padding-top: 1px;
+      font-size: 11px;
+      color: $input-color;
+      line-height: 1.4;
+    }
+  }
+
+  input[type="checkbox"] {
+    opacity: 0;
+    z-index: 1;
+    cursor: pointer;
+
+    &:focus + label::before{
+      @include tab-focus();
+    }
+
+    &:checked + label::after{
+      font-family: $font-family-awesome;
+      content: $check-icon;
+    }
+
+    //&:indeterminate + label::after{
+    //  display: block;
+    //  content: "";
+    //  width: 10px;
+    //  height: 3px;
+    //  background-color: #555555;
+    //  border-radius: 2px;
+    //  margin-left: -16.5px;
+    //  margin-top: 7px;
+    //}
+
+    &:disabled{
+      cursor: not-allowed;
+    }
+
+    &:disabled + label{
+      opacity: 0.65;
+
+      &::before{
+        background-color: $input-bg-disabled;
+        cursor: not-allowed;
+      }
+    }
+
+  }
+
+  &.checkbox-circle label::before{
+    border-radius: 50%;
+  }
+
+  &.checkbox-inline{
+    margin-top: 0;
+  }
+}
+
+//@mixin checkbox-variant($parent, $color) {
+//  #{$parent} input[type="checkbox"]:checked + label,
+//  #{$parent} input[type="radio"]:checked + label {
+//    &::before {
+//      background-color: $color;
+//      border-color: $color;
+//    }
+//    &::after{
+//      color: #fff;
+//    }
+//  }
+//}
+
+//@include checkbox-variant('.checkbox-primary', $brand-primary);
+//@include checkbox-variant('.checkbox-danger', $brand-danger);
+//@include checkbox-variant('.checkbox-info', $brand-info);
+//@include checkbox-variant('.checkbox-warning', $brand-warning);
+//@include checkbox-variant('.checkbox-success', $brand-success);

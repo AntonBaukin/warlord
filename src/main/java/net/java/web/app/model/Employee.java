@@ -83,21 +83,6 @@ public class Employee extends Entity
 		this.hired = hired;
 	}
 
-	/**
-	 * Date when the employee was fired.
-	 */
-	public Date getFired()
-	{
-		return fired;
-	}
-
-	private Date fired;
-
-	public void setFired(Date fired)
-	{
-		this.fired = fired;
-	}
-
 
 	/* Employee Mappings */
 
@@ -114,8 +99,5 @@ public class Employee extends Entity
 
 		register(Employee.class, "hired", o -> DU.ts(o.hired),
 		  (o, v) -> o.hired = DU.s2d((String)v));
-
-		register(Employee.class, "fired", o -> DU.ts(o.fired),
-		  (o, v) -> o.fired = DU.s2d((String)v));
 	}
 }

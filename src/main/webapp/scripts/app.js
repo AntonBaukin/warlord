@@ -153,17 +153,6 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			}
 		})
 
-		//~: fixes node width to the current
-		$scope.fixWidth = function(n, delay)
-		{
-			ZeT.assert(ZeT.isn(delay) && delay >= 0)
-
-			ZeT.timeout(delay, function(){
-				n.css('width', ZeTS.cat(n.outerWidth(), 'px')).
-				  addClass('fixed')
-			})
-		}
-
 		//~: anchored content support
 		ZeT.scope(function()
 		{
@@ -248,6 +237,21 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			$(document).find('head > title').text($scope.Content.title)
 		})
 
+		//~: fixes node width to the current
+		$scope.fixWidth = function(n, delay)
+		{
+			ZeT.assert(ZeT.isn(delay) && delay >= 0)
+			ZeT.timeout(delay, function(){
+				n.css('width', ZeTS.cat(n.outerWidth(), 'px')).
+				  addClass('fixed')
+			})
+		}
+
+		//~: makes the node height patch the reference
+		$scope.matchHeight = function(n, ref)
+		{
+			ZeT.assertn(n).height(ZeT.assertn(ref).height())
+		}
 	})
 
 	/**
@@ -301,6 +305,42 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			return ZeT.collect(globalDataMap, function(o){
 				if(d.uuid == ZeT.get(o, 'employee', 'department')) return o
 			})
+		}
+	})
+
+	//~: employees controller
+	main.controller('empsCtrl', function($scope, $element)
+	{
+		setupDefaults($scope, $element)
+
+		//~: load the data
+		$scope.$on('content-departments', $scope.initScope = function()
+		{
+			loadData('/get/departments', function()
+			{
+				loadData('/get/employees', function(emps)
+				{
+					$scope.filtered = emps
+					$scope.safeApply()
+				})
+			})
+		})
+
+		//~: person name
+		$scope.personName = function(p)
+		{
+			return ZeTS.catsep(' ', p.firstName, p.middleName, p.lastName)
+		}
+
+		//~: department name
+		$scope.depName = function(e)
+		{
+			var d = ZeT.get(e, 'employee', 'department')
+			if(ZeT.ises(d)) return
+
+			//~: get department object
+			d = ZeT.assertn(globalDataMap[d])
+			return ZeT.asserts(d.name)
 		}
 	})
 })

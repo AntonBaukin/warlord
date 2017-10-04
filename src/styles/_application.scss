@@ -164,7 +164,7 @@ table
 }
 
 
-/* Buttons & Forms */
+/* Buttons & Forms & Inputs */
 
 .btn
 {
@@ -242,7 +242,17 @@ form
     @include field-placeholder() {
       font-style: italic;
     }
+
+    &[type=text]
+    {
+      padding-bottom: $padding-base-vertical - 2px;
+    }
   }
+}
+
+.checkbox-inline
+{
+  @include pointer
 }
 
 
@@ -411,13 +421,39 @@ section.content.page
       > .compacted.line
       {
         position: relative;
+        line-height: 1px;
 
         > div
         {
+          @include user-select(text);
           font-size: $font-size-h4;
-          line-height: $font-size-h4;
+          line-height: $font-size-h4 * 1.1;
           white-space: nowrap;
           text-overflow: ellipsis;
+          overflow: hidden;
+
+          &.half
+          {
+            display: inline-block;
+            width: 50%;
+            padding-right: $font-size-h4;
+          }
+        }
+
+        > .sep
+        {
+          position: absolute;
+          display: inline-block;
+          width: 1px;
+          background-color: rgba($text-color, 0.5);
+          top: -0.75 * $font-size-base;
+          bottom: -0.75 * $font-size-base;
+          margin-left: -0.5 * $font-size-base;
+
+          & + div
+          {
+            padding-left: 0.5 * $font-size-base;
+          }
         }
 
         > .icons
@@ -448,6 +484,12 @@ section.content.page
         .form-control
         {
           font-size: $font-size-h5 * 1.22;
+        }
+
+        .abs-bottom
+        {
+          position: absolute;
+          bottom: 0;
         }
 
         > .buttons
