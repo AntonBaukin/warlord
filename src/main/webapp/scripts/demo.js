@@ -58,7 +58,7 @@ ZeT.extend(AppData,
 		var self = this, deps = this.data$deps = []
 
 		//~: generate departments
-		this.$times(5, function()
+		this.$times(2, 5, function()
 		{
 			deps.push({
 				uuid   : self.uuid(),

@@ -261,12 +261,48 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 	{
 		opts = opts || {}
 		$scope.view = {}
+
+		//~: go to element bu uuid
+		$scope.gotoObject = function(o)
+		{
+			if(ZeT.isox(o)) o = o.uuid
+			ZeT.asserts(o)
+
+			var n = $element.find('[uuid="' + o + '"]')
+			ZeT.assert(n.length <= 1)
+
+			//?: {not found} delay, maybe loading...
+			if(!n.length) return $scope.gotoDelayed = o
+			delete $scope.gotoDelayed
+
+			//~: expand the object block
+			$scope.view.obj = o
+			$scope.safeApply()
+
+			//~: scroll to this element
+			var w = n.closest('.content-wrapper')
+			w.parent().scrollTop(n.offset().top - w.offset().top - 20)
+		}
+
+		//~: go to element if delayed
+		$scope.gotoIfDelayed = function(){
+			if(!ZeT.isx($scope.gotoDelayed))
+				$scope.gotoObject($scope.gotoDelayed)
+		}
+
+		//~: listen on go to signal
+		if(!ZeT.ises(opts.gotosignal))
+			$scope.$on(opts.gotosignal, function(e, o){
+				$scope.gotoObject(o)
+			})
 	}
 
 	//~: departments controller
 	main.controller('depsCtrl', function($scope, $element)
 	{
-		setupDefaults($scope, $element)
+		setupDefaults($scope, $element, {
+			gotosignal: 'goto-department'
+		})
 
 		//~: load the data
 		$scope.$on('content-departments', $scope.initScope = function()
@@ -277,6 +313,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 				{
 					$scope.filtered = deps
 					$scope.safeApply()
+					$scope.gotoIfDelayed()
 				})
 			})
 		})
@@ -301,9 +338,20 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		//~: get department employees
 		$scope.listDepEmps = function(d)
 		{
-			if($scope.view.emps != d.uuid) return
+			if($scope.view.emps != d.uuid || $scope.view.obj != d.uuid) return
 			return ZeT.collect(globalDataMap, function(o){
 				if(d.uuid == ZeT.get(o, 'employee', 'department')) return o
+			})
+		}
+
+		//~: go to (view) employee expanded
+		$scope.gotoEmp = function(e)
+		{
+			$scope.$root.$broadcast('content-hide')
+			$scope.$root.$broadcast('content-employees')
+
+			ZeT.timeout(100, function() {
+				$scope.$root.$broadcast('goto-employee', e)
 			})
 		}
 	})
@@ -311,7 +359,9 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 	//~: employees controller
 	main.controller('empsCtrl', function($scope, $element)
 	{
-		setupDefaults($scope, $element)
+		setupDefaults($scope, $element, {
+			gotosignal: 'goto-employee'
+		})
 
 		//~: load the data
 		$scope.$on('content-departments', $scope.initScope = function()
@@ -341,6 +391,20 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			//~: get department object
 			d = ZeT.assertn(globalDataMap[d])
 			return ZeT.asserts(d.name)
+		}
+
+		//~: go to (view) department expanded
+		$scope.gotoDep = function(e)
+		{
+			var d = ZeT.get(e, 'employee', 'department')
+			if(ZeT.ises(d)) return
+
+			$scope.$root.$broadcast('content-hide')
+			$scope.$root.$broadcast('content-departments')
+
+			ZeT.timeout(100, function() {
+				$scope.$root.$broadcast('goto-department', d)
+			})
 		}
 	})
 })

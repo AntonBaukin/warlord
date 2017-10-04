@@ -6,20 +6,19 @@
   ag-init = "$scope.initScope()">
 
   <div class = "content-wrapper">
-    <div ng-repeat-start = "d in filtered track by d.uuid"
-      class = "section-list-repeated department"
-      ng-class = "{odd: $odd}">
+    <div ng-repeat-start = "d in filtered track by d.uuid" uuid = "{{d.uuid}}"
+      class = "section-list-repeated department" ng-class = "{odd: $odd}">
 
-      <div class = "compacted line" ng-if = "view.dep != d.uuid">
+      <div class = "compacted line" ng-if = "view.obj != d.uuid">
         <div class = "icons">
           <table><tr><td><span class = "btn btn-icon"
-            ng-click = "view.dep = d.uuid; view.emps = null"
+            ng-click = "view.obj = d.uuid; view.emps = null"
             ><i class = "fa fa-eye"></i></span></td></tr></table>
         </div>
         <div class = "name">{{d.name}}</div>
       </div>
 
-      <form class = "expanded block" ng-if = "view.dep == d.uuid">
+      <form class = "expanded block" ng-if = "view.obj == d.uuid">
         <div class = "form-group">
           <label>Department name</label>
           <input type = "text" class = "form-control" ng-model = "d.name"
@@ -61,7 +60,7 @@
 
         <div ag-trim class = "buttons">
           <div class = "left">
-            <button ng-click = "view.dep = view.emps = null"
+            <button ng-click = "view.obj = view.emps = null"
               class = "btn btn-default">Close</button>
             <button ng-click = "view.emps = (view.emps == d.uuid)?(null):(d.uuid)"
               class = "btn btn-info">View employees</button>
@@ -82,7 +81,7 @@
 
       <div class = "compacted line">
         <div class = "icons">
-          <table><tr><td><span class = "btn btn-icon"
+          <table><tr><td><span class = "btn btn-icon" ng-click = "gotoEmp(e)"
             ><i class = "fa fa-eye"></i></span></td></tr></table>
         </div>
         <div class = "name">{{personName(e)}}</div>

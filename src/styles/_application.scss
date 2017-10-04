@@ -427,7 +427,7 @@ section.content.page
         {
           @include user-select(text);
           font-size: $font-size-h4;
-          line-height: $font-size-h4 * 1.1;
+          line-height: $font-size-h4 * 1.22;
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
