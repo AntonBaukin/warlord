@@ -6,13 +6,13 @@
   ag-init = "$scope.initScope()">
 
   <div class = "content-wrapper">
-    <div ng-repeat = "e in emps track by e.uuid" uuid = "{{e.uuid}}"
+    <div ng-repeat-start = "e in emps track by e.uuid" uuid = "{{e.uuid}}"
       class = "section-list-repeated employee" ng-class = "{odd: $odd}">
 
       <div ag-trim class = "compacted line" ng-if = "view.obj.uuid != e.uuid">
         <div class = "icons">
-          <table><tr><td><span class = "btn btn-icon" ng-click = "view.obj = ZeT.deepClone(e)"
-            ><i class = "fa fa-eye"></i></span></td></tr></table>
+          <table><tr><td><span ng-click = "view.obj = ZeT.deepClone(e); view.seldep = null"
+            class = "btn btn-icon"><i class = "fa fa-eye"></i></span></td></tr></table>
         </div>
         <div class = "name half">{{personName(e)}}</div>
         <span class = "sep"></span>
@@ -62,12 +62,12 @@
           <div ag-trim class = "col-md-8 col-sm-12"
             ag-init = "$scope.matchHeight($element, $element.prev())">
             <div class = "form-group abs-bottom">
-              <span class = "checkbox checkbox-inline" ng-click = "e.sex = (e.sex == 'M')?(null):('M')">
-                <input type = "checkbox" ng-checked = "e.sex == 'M'"><label>Male</label>
+              <span class = "checkbox checkbox-inline" ng-click = "view.obj.sex = (view.obj.sex == 'M')?(null):('M')">
+                <input type = "checkbox" ng-checked = "view.obj.sex == 'M'"><label>Male</label>
               </span>
 
-              <span class = "checkbox checkbox-inline" ng-click = "e.sex = (e.sex == 'F')?(null):('F')">
-                <input type = "checkbox" ng-checked = "e.sex == 'F'"><label>Female</label>
+              <span class = "checkbox checkbox-inline" ng-click = "view.obj.sex = (view.obj.sex == 'F')?(null):('F')">
+                <input type = "checkbox" ng-checked = "view.obj.sex == 'F'"><label>Female</label>
               </span>
             </div>
           </div>
@@ -138,19 +138,39 @@
 
         <div ag-trim class = "buttons">
           <div class = "left">
-            <button ng-click = "view.obj = null"
+            <button ng-click = "view.obj = view.seldep = null"
               class = "btn btn-default">Close</button>
             <button class = "btn btn-info" ng-click = "gotoDep(e)">View department</button>
           </div>
 
           <div class = "right">
-            <button class = "btn btn-warning">Select department</button>
+            <button ng-click = "view.seldep = (view.seldep == e.uuid)?(null):(e.uuid)"
+              class = "btn btn-warning">Select department</button>
             <button class = "btn btn-success" ng-click = "submitEmp()"
               ng-disabled = "ZeT.deepEquals(view.obj, e)">Commit</button>
           </div>
         </div>
       </form>
     </div>
+
+    <!-- list all the departments to select -->
+    <div ng-repeat = "d in listAllDeps(e) track by d.uuid"
+      class = "section-list-repeated inner alter department"
+      ng-class = "{odd: $odd}">
+
+      <div class = "compacted line">
+        <div class = "icons">
+          <table>
+            <tr>
+              <td><span ng-click = "view.obj.employee.department = d.uuid"
+                class = "btn btn-icon"><i class = "fa fa-check-square-o"></i></span></td>
+            </tr>
+          </table>
+        </div>
+        <div class = "name">{{d.name}}</div>
+      </div>
     </div>
+
+    <div class = "section-list-sep" ng-repeat-end></div>
   </div>
 </section>

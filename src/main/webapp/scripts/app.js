@@ -535,10 +535,11 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		//~: load the data
 		$scope.$on('content-departments', $scope.initScope = function()
 		{
-			loadData('/get/departments', function()
+			loadData('/get/departments', function(deps)
 			{
 				loadData('/get/employees', function(emps)
 				{
+					$scope.deps = deps
 					$scope.emps = emps
 					$scope.safeApply()
 				})
@@ -593,6 +594,11 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			AppData.post('/update/employee', e, function(obj) {
 				$scope.updateDataObj('/get/employees', $scope.emps, obj)
 			})
+		}
+
+		//~: list all the departments
+		$scope.listAllDeps = function(e) {
+			return ($scope.view.seldep == e.uuid)?($scope.deps):(null)
 		}
 	})
 })

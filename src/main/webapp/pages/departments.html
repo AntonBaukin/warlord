@@ -45,7 +45,7 @@
           <div class = "col-sm-8">
             <div class = "form-group">
               <label>Head</label>
-              <input type = "text" class = "form-control" readonly ng-value = "headName(d)">
+              <input type = "text" class = "form-control" readonly ng-value = "headName(view.obj)">
             </div>
           </div>
 
@@ -65,14 +65,16 @@
 
         <div ag-trim class = "buttons">
           <div class = "left">
-            <button ng-click = "view.obj = view.emps = null"
+            <button ng-click = "view.obj = view.emps = view.selhead = null"
               class = "btn btn-default">Close</button>
-            <button ng-click = "view.emps = (view.emps == d.uuid)?(null):(d.uuid)"
+            <button ng-click = "view.emps = (view.emps == d.uuid)?(null):(d.uuid); view.selhead = null"
               class = "btn btn-info">View employees</button>
           </div>
 
           <div class = "right">
-            <button class = "btn btn-warning">Select head</button>
+            <button ng-click = "view.emps = (view.selhead == d.uuid)?(null):(d.uuid);
+              view.selhead = (view.selhead == d.uuid)?(null):(d.uuid)"
+              class = "btn btn-warning">Select head</button>
             <button class = "btn btn-success" ng-click = "submitDep()"
               ng-disabled = "ZeT.deepEquals(view.obj, d)">Commit</button>
           </div>
@@ -87,8 +89,16 @@
 
       <div class = "compacted line">
         <div class = "icons">
-          <table><tr><td><span class = "btn btn-icon" ng-click = "gotoEmp(e)"
-            ><i class = "fa fa-eye"></i></span></td></tr></table>
+          <table>
+            <tr>
+              <td><span class = "btn btn-icon" ng-click = "gotoEmp(e)"
+                ><i class = "fa fa-eye"></i></span></td>
+
+              <td ng-if = "view.selhead == d.uuid"><span class = "btn btn-icon"
+                ng-click = "view.obj.head.employee = e.uuid; view.emps = view.selhead = null"
+                ><i class = "fa fa-check-square-o"></i></span></td>
+            </tr>
+          </table>
         </div>
         <div class = "name">{{personName(e)}}</div>
       </div>
