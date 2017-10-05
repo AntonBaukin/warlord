@@ -31,6 +31,23 @@ ZeT.extend(AppData,
 		})
 	},
 
+	post             : function(url, obj, f)
+	{
+		ZeT.assert(!ZeT.ises(url) && ZeT.isox(obj) && ZeT.isf(f))
+
+		//~: update-get the data
+		var data = this.post$demo(url, obj)
+
+		//~: invoke the callback asynchronously
+		ZeT.timeout(10, function()
+		{
+			if(ZeT.isx(data))
+				f.call({ status: 404 })
+			else
+				f.call({ status: 200 }, data)
+		})
+	},
+
 	get$demo         : function(url, ps)
 	{
 		ZeT.log('Get demo data: ', url, ps)
@@ -40,6 +57,17 @@ ZeT.extend(AppData,
 
 		if(url == '/get/employees')
 			return ZeT.deepClone(this.get$emps())
+	},
+
+	post$demo        : function(url, obj)
+	{
+		ZeT.log('Post demo data: ', url, obj)
+
+		if(url == '/update/department')
+			return ZeT.deepClone(this.update$dep(obj))
+
+		if(url == '/update/employee')
+			return ZeT.deepClone(this.update$emp(obj))
 	},
 
 	get$deps         : function()
@@ -55,17 +83,18 @@ ZeT.extend(AppData,
 			return ZeTS.cat(a, b, c)
 		}
 
-		var self = this, deps = this.data$deps = []
+		var self = this, deps = this.data$deps = {}
 
 		//~: generate departments
 		this.$times(2, 5, function()
 		{
-			deps.push({
-				uuid   : self.uuid(),
+			var uuid = self.uuid()
+			deps[uuid] = {
+				uuid   : uuid,
 				name   : self.$cap(self.$words(5)),
 				phone  : self.$phone(),
 				office : office.call(self)
-			})
+			}
 		})
 
 		//~: generate employees
@@ -90,6 +119,12 @@ ZeT.extend(AppData,
 		return this.data$deps
 	},
 
+	update$dep       : function(o)
+	{
+		ZeT.assertn(ZeT.get(this.data$deps, ZeT.asserts(o.uuid)))
+		return this.data$deps[o.uuid] = o
+	},
+
 	get$emps         : function()
 	{
 		if(this.data$emps)
@@ -105,13 +140,14 @@ ZeT.extend(AppData,
 			)
 		}
 
-		var self = this, emps = this.data$emps = []
+		var self = this, emps = this.data$emps = {}
 
 		//~: generate employees
 		this.$times(35, function()
 		{
-			var e; emps.push(e = {
-				uuid       : self.uuid(),
+			var e, uuid = self.uuid()
+			emps[uuid] = e = {
+				uuid       : uuid,
 				lastName   : self.$cap(self.$words(1)),
 				firstName  : self.$cap(self.$words(1)),
 				phone      : self.$phone(),
@@ -124,7 +160,7 @@ ZeT.extend(AppData,
 				  email    : self.$email(),
 				  hired    : self.$date(-365 * 2).toISOString()
 				}
-			})
+			}
 
 			if(self.$bool(3))
 				e.middleName = self.$cap(self.$words(1))
@@ -134,6 +170,12 @@ ZeT.extend(AppData,
 		})
 
 		return this.data$emps
+	},
+
+	update$emp       : function(o)
+	{
+		ZeT.assertn(ZeT.get(this.data$emps, ZeT.asserts(o.uuid)))
+		return this.data$emps[o.uuid] = o
 	},
 
 	/**
@@ -222,11 +264,18 @@ ZeT.extend(AppData,
 	 */
 	$a               : function(a, n)
 	{
+		var o; if(ZeT.isox(a)) {
+			o = a; a = ZeT.keys(a)
+		}
+
 		ZeT.assert(ZeT.isi(a.length) && a.length > 0)
 		ZeT.assert(ZeT.isi(n) && n >= 0)
 
 		for(var r = [], i = 0;(i < n);i++)
-			r.push(a[Math.floor(Math.random() *a.length)])
+		{
+			var x = ZeT.assertn(a[Math.floor(Math.random() * a.length)])
+			r.push(o?o[x]:x)
+		}
 
 		return r
 	},

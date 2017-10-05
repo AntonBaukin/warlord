@@ -48,10 +48,12 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 	{
 		var a = arguments, r = a[0], u = a[1], f = a[2]
 		if(!ZeT.isb(r)) { f = u; u = r; r = false }
-		ZeT.assert(!ZeT.ises(u) && (ZeT.isf(f) || ZeT.isa(f)))
+		ZeT.assert(!ZeT.ises(u) && (ZeT.isf(f) || ZeT.isox(f)))
 
 		function replaceData(data)
 		{
+			ZeT.assert(ZeT.isox(data))
+
 			//~: previous version
 			var x = globalData[u], ids = (x)?{}:(null)
 
@@ -71,7 +73,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			})
 		}
 
-		if(ZeT.isa(f)) //?: {has direct data}
+		if(ZeT.isox(f)) //?: {has direct data}
 			return replaceData(f)
 
 		//?: {has no data for immediate answer}
@@ -86,8 +88,12 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		//~: (always) load the requested data
 		AppData.get(u, function(obj)
 		{
-			if(ZeT.iso(obj)) //?: {is error}
-				return f.call(this)
+			//?: {is jQuery XHR wrapper}
+			if(ZeT.isf(obj.statusCode))
+				return f.call(this) //<-- threat as error
+
+			//?: {is plain data object}
+			ZeT.assert(ZeT.iso(obj))
 
 			//~: replaced the cached data
 			replaceData(obj)
@@ -101,6 +107,9 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 	main.controller('root', function($scope, $element, $timeout, $sanitize)
 	{
 		ZeT.extend($scope, {
+
+			ZeT      : ZeT,
+			ZeTS     : ZeTS,
 
 			//~: localization content (page texts)
 			Content  : Content_EN,
@@ -258,16 +267,31 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		 * for the given input field that is followed with
 		 * input-group-addon > button to click.
 		 */
-		$scope.initDatePicker = function(input, hidden)
+		$scope.initDatePicker = function() {
+			ZeT.timeout(100, $scope.initDatePickerNow, $scope, arguments)
+		}
+
+		$scope.initDatePickerNow = function(input, hidden)
 		{
 			ZeT.assert(input && input[0])
 			ZeT.assert(hidden && hidden[0])
 			ZeT.assert(hidden.is('input'))
 
+			/**
+			 * Takes timestamp in arbitrary time zone and
+			 * makes it UTC date via clearing zone shift.
+			 */
+			function utc(m)
+			{
+				return moment.utc([ (m = moment(m)).get('year'),
+				  m.get('month'),  m.get('date'), 0, 0, 0, 0 ])
+			}
+
 			var dp = hidden.datetimepicker({
 				showClear   : true,
-				format      : 'YYYY-MM-DDTHH:mm:ssZ',
+				format      : 'YYYY-MM-DDTHH:mm:ss.SSSZ',
 				keepOpen    : true,
+				defaultDate : utc(ZeT.ises(hidden.val())?moment():(hidden.val())),
 
 				icons       : {
 					time     : 'fa fa-clock-o',
@@ -319,20 +343,13 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			//~: update model via change event
 			hidden.on('dp.change', function(e)
 			{
-				var v = (!e.date)?(''):moment(e.date).format()
-
-				//if(!e.date) dp.hide(); else
-				//	//?: {not only the time had changed}
-				//	if(e.oldDate && !e.date.isSame(e.oldDate, 'day'))
-				//		dp.hide()
-
-				ZeT.log('Value ', v)
-
-				//hidden.val(v).trigger('change')
+				//~: trigger hidden field to update bound model
+				hidden.val((!e.date)?(''):utc(e.date).toDate().toISOString()).
+				  trigger('change') //<-- updates the model
 			})
 		}
 
-		//~: click on body to hide date-time picker
+		//~: click on body to hide date-time pickers
 		$(document.body).click(function(e)
 		{
 			//?: {clicked in a picker}
@@ -347,8 +364,16 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 				if(dp && dp.showTime + 500 < new Date().getTime())
 					dp.hide()
 			})
-
 		})
+
+		//~: is view object differs
+		$scope.isViewDiffers = function(o)
+		{
+			var v = ZeT.get(this, 'view', 'obj')
+			if(ZeT.isx(v) || ZeT.isx(o))
+				return false
+			return ZeT.deep
+		}
 	})
 
 	/**
@@ -359,21 +384,32 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		opts = opts || {}
 		$scope.view = {}
 
-		//~: go to element bu uuid
-		$scope.gotoObject = function(o)
+		//~: find object node by data uuid
+		$scope.findObject = function(o, require)
 		{
 			if(ZeT.isox(o)) o = o.uuid
 			ZeT.asserts(o)
 
 			var n = $element.find('[uuid="' + o + '"]')
-			ZeT.assert(n.length <= 1)
+			ZeT.assert(n.length <= 1 && (!require || n.length == 1))
+
+			return n
+		}
+
+		//~: go to element by uuid
+		$scope.gotoObject = function(o)
+		{
+			if(ZeT.isox(o)) o = o.uuid
+			ZeT.asserts(o)
+
+			var n = $scope.findObject(o)
 
 			//?: {not found} delay, maybe loading...
 			if(!n.length) return $scope.gotoDelayed = o
 			delete $scope.gotoDelayed
 
 			//~: expand the object block
-			$scope.view.obj = o
+			$scope.view.obj = ZeT.deepClone(ZeT.assertn(globalDataMap[o]))
 			$scope.safeApply()
 
 			//~: scroll to this element
@@ -392,6 +428,27 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			$scope.$on(opts.gotosignal, function(e, o){
 				$scope.gotoObject(o)
 			})
+
+		/**
+		 * Updates global data object and the value
+		 * stored in object-like collection.
+		 */
+		$scope.updateDataObj = function(url, c, obj)
+		{
+			ZeT.assert(ZeT.isox(c) && ZeT.isox(obj))
+			ZeT.assert(!ZeT.ises(url) && !ZeT.ises(obj.uuid))
+
+			//~: update in the collection
+			c[obj.uuid] = obj
+
+			//~: update in the global map
+			globalDataMap[obj.uuid] = obj
+
+			//~: update in the global data
+			ZeT.assertn(globalData[url])[obj.uuid] = obj
+
+			$scope.safeApply() //<-- update the scope
+		}
 	}
 
 	//~: departments controller
@@ -408,7 +465,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			{
 				loadData('/get/employees', function()
 				{
-					$scope.filtered = deps
+					$scope.deps = deps
 					$scope.safeApply()
 					$scope.gotoIfDelayed()
 				})
@@ -435,7 +492,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		//~: get department employees
 		$scope.listDepEmps = function(d)
 		{
-			if($scope.view.emps != d.uuid || $scope.view.obj != d.uuid) return
+			if($scope.view.emps != d.uuid || $scope.view.obj.uuid != d.uuid) return
 			return ZeT.collect(globalDataMap, function(o){
 				if(d.uuid == ZeT.get(o, 'employee', 'department')) return o
 			})
@@ -449,6 +506,21 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 
 			ZeT.timeout(100, function() {
 				$scope.$root.$broadcast('goto-employee', e)
+			})
+		}
+
+		//~: submit edited department
+		$scope.submitDep = function()
+		{
+			var d = ZeT.assertn($scope.view.obj)
+			var n = $scope.findObject(d)
+
+			//?: {the department name is not set}
+			if(ZeT.ises(d.name))
+				return n.find('.form-group.name').addClass('error-empty')
+
+			AppData.post('/update/department', d, function(obj) {
+				$scope.updateDataObj('/get/departments', $scope.deps, obj)
 			})
 		}
 	})
@@ -467,7 +539,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			{
 				loadData('/get/employees', function(emps)
 				{
-					$scope.filtered = emps
+					$scope.emps = emps
 					$scope.safeApply()
 				})
 			})
@@ -501,6 +573,25 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 
 			ZeT.timeout(100, function() {
 				$scope.$root.$broadcast('goto-department', d)
+			})
+		}
+
+		//~: submit edited employee
+		$scope.submitEmp = function()
+		{
+			var e = ZeT.assertn($scope.view.obj)
+			var n = $scope.findObject(e)
+
+			//?: {person last name is not set}
+			if(ZeT.ises(e.lastName))
+				return n.find('.form-group.last-name').addClass('error-empty')
+
+			//?: {person first name is not set}
+			if(ZeT.ises(e.firstName))
+				return n.find('.form-group.first-name').addClass('error-empty')
+
+			AppData.post('/update/employee', e, function(obj) {
+				$scope.updateDataObj('/get/employees', $scope.emps, obj)
 			})
 		}
 	})

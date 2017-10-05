@@ -6,22 +6,22 @@
   ag-init = "$scope.initScope()">
 
   <div class = "content-wrapper">
-    <div ng-repeat-start = "d in filtered track by d.uuid" uuid = "{{d.uuid}}"
+    <div ng-repeat-start = "d in deps track by d.uuid" uuid = "{{d.uuid}}"
       class = "section-list-repeated department" ng-class = "{odd: $odd}">
 
-      <div class = "compacted line" ng-if = "view.obj != d.uuid">
+      <div class = "compacted line" ng-if = "view.obj.uuid != d.uuid">
         <div class = "icons">
           <table><tr><td><span class = "btn btn-icon"
-            ng-click = "view.obj = d.uuid; view.emps = null"
+            ng-click = "view.obj = ZeT.deepClone(d); view.emps = null"
             ><i class = "fa fa-eye"></i></span></td></tr></table>
         </div>
         <div class = "name">{{d.name}}</div>
       </div>
 
-      <form class = "expanded block" ng-if = "view.obj == d.uuid">
-        <div class = "form-group">
+      <form class = "expanded block" ng-if = "view.obj.uuid == d.uuid">
+        <div class = "form-group name">
           <label>Department name</label>
-          <input type = "text" class = "form-control" ng-model = "d.name"
+          <input type = "text" class = "form-control" ng-model = "view.obj.name"
             placeholder = "Set department name that is required…">
         </div>
 
@@ -29,14 +29,14 @@
           <div class = "col-md-6 col-sm-12">
             <div class = "form-group">
               <label>Office</label>
-              <input type = "text" class = "form-control" ng-model = "d.office">
+              <input type = "text" class = "form-control" ng-model = "view.obj.office">
             </div>
           </div>
 
           <div class = "col-md-6 col-sm-12">
             <div class = "form-group">
               <label>Phone</label>
-              <input type = "text" class = "form-control" ng-model = "d.phone">
+              <input type = "text" class = "form-control" ng-model = "view.obj.phone">
             </div>
           </div>
         </div>
@@ -52,10 +52,10 @@
           <div class = "col-sm-4">
             <div class = "form-group">
               <label>Since</label>
-              <input type = "text" class = "date-input-value-copy" model = "d.head.since">
+              <input type = "text" class = "date-input-value-copy" ng-model = "view.obj.head.since">
               <div class = "input-group">
                 <input type = "text" class = "form-control" readonly
-                  ng-value = "d.head.since | date : 'MMMM d, yyyy' : 'UTC'"
+                  ng-value = "view.obj.head.since | date : 'MMMM d, yyyy' : 'UTC'"
                   ag-init = "$scope.initDatePicker($element, $element.parent().prev())">
                 <div class = "input-group-addon"><span class = "btn btn-icon"><i class = "fa fa-calendar-o"></i></span></div>
               </div>
@@ -73,7 +73,8 @@
 
           <div class = "right">
             <button class = "btn btn-warning">Select head</button>
-            <button class = "btn btn-success">Commit</button>
+            <button class = "btn btn-success" ng-click = "submitDep()"
+              ng-disabled = "ZeT.deepEquals(view.obj, d)">Commit</button>
           </div>
         </div>
       </form>

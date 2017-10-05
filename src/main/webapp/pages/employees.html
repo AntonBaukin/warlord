@@ -6,12 +6,12 @@
   ag-init = "$scope.initScope()">
 
   <div class = "content-wrapper">
-    <div ng-repeat = "e in filtered track by e.uuid" uuid = "{{e.uuid}}"
+    <div ng-repeat = "e in emps track by e.uuid" uuid = "{{e.uuid}}"
       class = "section-list-repeated employee" ng-class = "{odd: $odd}">
 
-      <div ag-trim class = "compacted line" ng-if = "view.obj != e.uuid">
+      <div ag-trim class = "compacted line" ng-if = "view.obj.uuid != e.uuid">
         <div class = "icons">
-          <table><tr><td><span class = "btn btn-icon" ng-click = "view.obj = e.uuid"
+          <table><tr><td><span class = "btn btn-icon" ng-click = "view.obj = ZeT.deepClone(e)"
             ><i class = "fa fa-eye"></i></span></td></tr></table>
         </div>
         <div class = "name half">{{personName(e)}}</div>
@@ -19,12 +19,12 @@
         <div class = "department half">{{depName(e)}}</div>
       </div>
 
-      <form class = "expanded block" ng-if = "view.obj == e.uuid">
+      <form class = "expanded block" ng-if = "view.obj.uuid == e.uuid">
         <div class = "row">
           <div class = "col-md-4 col-sm-12">
-            <div class = "form-group">
+            <div class = "form-group first-name">
               <label>First name</label>
-              <input type = "text" class = "form-control" ng-model = "e.firstName"
+              <input type = "text" class = "form-control" ng-model = "view.obj.firstName"
                 placeholder = "Set required first name…">
             </div>
           </div>
@@ -32,14 +32,14 @@
           <div class = "col-md-4 col-sm-12">
             <div class = "form-group">
               <label>Middle name</label>
-              <input type = "text" class = "form-control" ng-model = "e.middleName">
+              <input type = "text" class = "form-control" ng-model = "view.obj.middleName">
             </div>
           </div>
 
           <div class = "col-md-4 col-sm-12">
-            <div class = "form-group">
+            <div class = "form-group last-name">
               <label>Last name</label>
-              <input type = "text" class = "form-control" ng-model = "e.lastName"
+              <input type = "text" class = "form-control" ng-model = "view.obj.lastName"
                 placeholder = "Set required last name…">
             </div>
           </div>
@@ -49,8 +49,13 @@
           <div class = "col-md-4 col-sm-12">
             <div class = "form-group">
               <label>Date of birth</label>
-              <input type = "text" class = "form-control" readonly
-                ng-value = "e.dob | date : 'MMMM d, yyyy' : 'UTC'">
+              <input type = "text" class = "date-input-value-copy" ng-model = "view.obj.dob">
+              <div class = "input-group">
+                <input type = "text" class = "form-control" readonly
+                  ng-value = "view.obj.dob | date : 'MMMM d, yyyy' : 'UTC'"
+                  ag-init = "$scope.initDatePicker($element, $element.parent().prev())">
+                <div class = "input-group-addon"><span class = "btn btn-icon"><i class = "fa fa-calendar-o"></i></span></div>
+              </div>
             </div>
           </div>
 
@@ -72,14 +77,14 @@
           <div class = "col-md-6 col-sm-12">
             <div class = "form-group">
               <label>Personal email</label>
-              <input type = "text" class = "form-control" ng-model = "e.email">
+              <input type = "text" class = "form-control" ng-model = "view.obj.email">
             </div>
           </div>
 
           <div class = "col-md-6 col-sm-12">
             <div class = "form-group">
               <label>Personal phone</label>
-              <input type = "text" class = "form-control" ng-model = "e.phone">
+              <input type = "text" class = "form-control" ng-model = "view.obj.phone">
             </div>
           </div>
         </div>
@@ -88,7 +93,7 @@
           <div class = "col-sm-12">
             <div class = "form-group">
               <label>Home address</label>
-              <input type = "text" class = "form-control" ng-model = "e.address">
+              <input type = "text" class = "form-control" ng-model = "view.obj.address">
             </div>
           </div>
         </div>
@@ -97,15 +102,20 @@
           <div class = "col-md-8 col-sm-12">
             <div class = "form-group">
               <label>Works in department</label>
-              <input type = "text" class = "form-control" readonly ng-value = "depName(e)">
+              <input type = "text" class = "form-control" readonly ng-value = "depName(view.obj)">
             </div>
           </div>
 
           <div class = "col-md-4 col-sm-12">
             <div class = "form-group">
               <label>Since</label>
-              <input type = "text" class = "form-control" readonly
-                ng-value = "e.employee.hired | date : 'MMMM d, yyyy' : 'UTC'">
+              <input type = "text" class = "date-input-value-copy" ng-model = "view.obj.employee.hired">
+              <div class = "input-group">
+                <input type = "text" class = "form-control" readonly
+                  ng-value = "view.obj.employee.hired | date : 'MMMM d, yyyy' : 'UTC'"
+                  ag-init = "$scope.initDatePicker($element, $element.parent().prev())">
+                <div class = "input-group-addon"><span class = "btn btn-icon"><i class = "fa fa-calendar-o"></i></span></div>
+              </div>
             </div>
           </div>
         </div>
@@ -114,14 +124,14 @@
           <div class = "col-md-6 col-sm-12">
             <div class = "form-group">
               <label>Work email</label>
-              <input type = "text" class = "form-control" ng-model = "e.employee.email">
+              <input type = "text" class = "form-control" ng-model = "view.obj.employee.email">
             </div>
           </div>
 
           <div class = "col-md-6 col-sm-12">
             <div class = "form-group">
               <label>Work phone</label>
-              <input type = "text" class = "form-control" ng-model = "e.employee.phone">
+              <input type = "text" class = "form-control" ng-model = "view.obj.employee.phone">
             </div>
           </div>
         </div>
@@ -135,7 +145,8 @@
 
           <div class = "right">
             <button class = "btn btn-warning">Select department</button>
-            <button class = "btn btn-success">Commit</button>
+            <button class = "btn btn-success" ng-click = "submitEmp()"
+              ng-disabled = "ZeT.deepEquals(view.obj, e)">Commit</button>
           </div>
         </div>
       </form>

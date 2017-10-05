@@ -39,5 +39,39 @@ var AppData = ZeT.singleInstance('App:Data:Proxy',
 
 			f.call(xhr, o)
 		})
+	},
+
+	post             : function(url, obj, f)
+	{
+		ZeT.assert(!ZeT.ises(url) && ZeT.isox(obj) && ZeT.isf(f))
+
+		var x = { //<-- the request
+			url         : url,
+			type        : 'POST',
+			data        : ZeT.o2s(o), //<-- encode the post payload
+			contentType : 'application/json;charset=utf-8'
+		}
+
+		//!: issue post request
+		var post = jQuery.post(x)
+
+		post.fail(function(xhr, statusText)
+		{
+			ZeT.log('AppData.post(', url, ') error [',
+			  xhr.status, ']: ', statusText)
+
+			f.call(xhr)
+		})
+
+		post.done(function(o, statusText, xhr)
+		{
+			//?: {not 200 status code}
+			ZeT.assert(200 == xhr.status)
+
+			//!: always expect json object
+			ZeT.assert(ZeT.isox(o))
+
+			f.call(xhr, o)
+		})
 	}
 })

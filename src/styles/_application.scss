@@ -235,6 +235,19 @@ form
     font-weight: $font-weight-thin;
   }
 
+  .form-group
+  {
+    &.error-empty
+    {
+      input
+      {
+        @include field-placeholder() {
+          color: $input-color-error;
+        }
+      }
+    }
+  }
+
   .form-control
   {
     font-weight: $font-weight-base;

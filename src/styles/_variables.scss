@@ -31,6 +31,7 @@ $well-bg-odd:             #20394B;
 $well-bg-alter:           #422919;
 $well-bg-alter-odd:       #653f26;
 $input-color:             $text-color-strong;
+$input-color-error:       #c96d1f;
 $input-bg:                #284974;
 $input-bg-disabled:       darken($input-bg, 5%);
 $input-border:            #3a5b86;
@@ -39,6 +40,7 @@ $well-text-color:         $text-color;
 $link-color:              $text-color;
 $link-hover-color:        $text-color-strong;
 $dropdown-bg:             lighten($well-bg, 15%);
+$dropdown-border:         $dropdown-bg;
 
 
 /* Button Colors */

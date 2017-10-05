@@ -1168,6 +1168,68 @@ ZeT.extend(ZeT,
 	}),
 
 	/**
+	 * Takes two object-like, arrays, or integral types
+	 * and checks deeply they are equal. Integral values
+	 * are not coerced. Undefined or null properties of
+	 * objects are treated as not existing. Null is
+	 * treated equal to undefined.
+	 */
+	deepEquals       : ZeT.scope(function(/* a, b */)
+	{
+		function eqo(a, b) //<-- object-like
+		{
+			//~: check the keys of left object
+			var ks = ZeT.keys(a), xa = {}
+			for(var k, i = 0, n = ks.length;(i < n);i++)
+			{
+				xa[k = ks[i]] = true
+
+				if(!eq(a[k], b[k]))
+					return false
+			}
+
+			//~: check the keys of right object
+			ks = ZeT.keys(b)
+			for(i = 0, n = ks.length;(i < n);i++)
+				//?: {missed this kei in the left}
+				if(!(xa[k = ks[i]]))
+					//?: {the field is defined}
+					if(!ZeT.isx(b[k]))
+						return false
+
+			return true
+		}
+
+		function eqa(a, b) //<-- array-like
+		{
+			if(a.length != b.length)
+				return false
+
+			for(var i = 0, n = a.length;(i < n);i++)
+				if(!eq(a[i], b[i]))
+					return false
+
+			return true
+		}
+
+		function eq(a, b)  //<-- general
+		{
+			if(ZeT.isx(a) && ZeT.isx(b))
+				return true
+
+			if(ZeT.isax(a) && ZeT.isax(b))
+				return eqa(a, b)
+
+			if(ZeT.isox(a) && ZeT.isox(b))
+				return eqo(a, b)
+
+			return (a === b)
+		}
+
+		return eq
+	}),
+
+	/**
 	 * Tells whether the object given has only
 	 * these own attributes. If object is an array,
 	 * it is checked deeply!
