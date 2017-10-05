@@ -6,8 +6,21 @@
   ag-init = "$scope.initScope()">
 
   <div class = "content-wrapper">
+
+    <div ag-class = "{'toggle-content-menu': '~hidden', 'content-hide': 'hidden'}"
+      class = "content-menu hidden">
+
+      <div class = "buttons">
+        <div class = "right">
+          <btn ng-click = "view.obj = deps[NU]"
+            class = "btn btn-warning">Add department</btn>
+        </div>
+      </div>
+    </div>
+
     <div ng-repeat-start = "d in deps track by d.uuid" uuid = "{{d.uuid}}"
-      class = "section-list-repeated department" ng-class = "{odd: $odd}">
+      class = "section-list-repeated department" ng-class = "{odd: $odd}"
+      ng-if = "NU != d.uuid || NU == view.obj.uuid">
 
       <div class = "compacted line" ng-if = "view.obj.uuid != d.uuid">
         <div class = "icons">
@@ -67,16 +80,18 @@
           <div class = "left">
             <button ng-click = "view.obj = view.emps = view.selhead = null"
               class = "btn btn-default">Close</button>
+
             <button ng-click = "view.emps = (view.emps == d.uuid)?(null):(d.uuid); view.selhead = null"
-              class = "btn btn-info">View employees</button>
+              class = "btn btn-info" ng-if = "NU != view.obj.uuid">View employees</button>
           </div>
 
           <div class = "right">
             <button ng-click = "view.emps = (view.selhead == d.uuid)?(null):(d.uuid);
               view.selhead = (view.selhead == d.uuid)?(null):(d.uuid)"
-              class = "btn btn-warning">Select head</button>
+              class = "btn btn-warning" ng-if = "NU != view.obj.uuid">Select head</button>
+
             <button class = "btn btn-success" ng-click = "submitDep()"
-              ng-disabled = "ZeT.deepEquals(view.obj, d)">Commit</button>
+              ng-disabled = "NU != view.obj.uuid && ZeT.deepEquals(view.obj, d)">Commit</button>
           </div>
         </div>
       </form>

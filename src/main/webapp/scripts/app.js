@@ -103,11 +103,17 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		})
 	}
 
+	/**
+	 * NULL UUID used as null-object pattern.
+	 */
+	var NU = '00000000-0000-0000-0000-000000000000'
+
 	//~: root controller
 	main.controller('root', function($scope, $element, $timeout, $sanitize)
 	{
 		ZeT.extend($scope, {
 
+			NU       : NU,
 			ZeT      : ZeT,
 			ZeTS     : ZeTS,
 
@@ -451,6 +457,17 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		}
 	}
 
+	/**
+	 * Sets as the first item of the data mapping
+	 * null object having NU primary key.
+	 */
+	function insertNullObject(objs)
+	{
+		ZeT.assert(ZeT.isox(objs))
+		var res = {}; res[NU] = { uuid: NU }
+		return ZeT.extend(res, objs)
+	}
+
 	//~: departments controller
 	main.controller('depsCtrl', function($scope, $element)
 	{
@@ -465,7 +482,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			{
 				loadData('/get/employees', function()
 				{
-					$scope.deps = deps
+					$scope.deps = insertNullObject(deps)
 					$scope.safeApply()
 					$scope.gotoIfDelayed()
 				})
@@ -519,9 +536,22 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			if(ZeT.ises(d.name))
 				return n.find('.form-group.name').addClass('error-empty')
 
-			AppData.post('/update/department', d, function(obj) {
-				$scope.updateDataObj('/get/departments', $scope.deps, obj)
-			})
+			if(NU != d.uuid) //?: {updating}
+			{
+				AppData.post('/update/department', d, function(obj) {
+					$scope.updateDataObj('/get/departments', $scope.deps, obj)
+				})
+			}
+			else //<-- saving
+			{
+				//~: set empty null-object
+				$scope.deps[NU] = { uuid: NU }
+				delete d.uuid //<-- remove null-uuid
+
+				AppData.post('/save/department', d, function(obj) {
+					$scope.updateDataObj('/get/departments', $scope.deps, obj)
+				})
+			}
 		}
 	})
 
@@ -540,7 +570,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 				loadData('/get/employees', function(emps)
 				{
 					$scope.deps = deps
-					$scope.emps = emps
+					$scope.emps = insertNullObject(emps)
 					$scope.safeApply()
 				})
 			})
@@ -591,9 +621,22 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			if(ZeT.ises(e.firstName))
 				return n.find('.form-group.first-name').addClass('error-empty')
 
-			AppData.post('/update/employee', e, function(obj) {
-				$scope.updateDataObj('/get/employees', $scope.emps, obj)
-			})
+			if(NU != e.uuid) //?: {updating}
+			{
+				AppData.post('/update/employee', e, function(obj) {
+					$scope.updateDataObj('/get/employees', $scope.emps, obj)
+				})
+			}
+			else //<-- saving
+			{
+				//~: set empty null-object
+				$scope.emps[NU] = { uuid: NU }
+				delete e.uuid //<-- remove null-uuid
+
+				AppData.post('/save/employee', e, function(obj) {
+					$scope.updateDataObj('/get/employees', $scope.emps, obj)
+				})
+			}
 		}
 
 		//~: list all the departments

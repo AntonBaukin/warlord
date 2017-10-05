@@ -6,8 +6,21 @@
   ag-init = "$scope.initScope()">
 
   <div class = "content-wrapper">
+
+    <div ag-class = "{'toggle-content-menu': '~hidden', 'content-hide': 'hidden'}"
+      class = "content-menu hidden">
+
+      <div class = "buttons">
+        <div class = "right">
+          <btn ng-click = "view.obj = emps[NU]"
+            class = "btn btn-warning">Add employee</btn>
+        </div>
+      </div>
+    </div>
+
     <div ng-repeat-start = "e in emps track by e.uuid" uuid = "{{e.uuid}}"
-      class = "section-list-repeated employee" ng-class = "{odd: $odd}">
+      class = "section-list-repeated employee" ng-class = "{odd: $odd}"
+      ng-if = "NU != e.uuid || NU == view.obj.uuid">
 
       <div ag-trim class = "compacted line" ng-if = "view.obj.uuid != e.uuid">
         <div class = "icons">
@@ -147,7 +160,7 @@
             <button ng-click = "view.seldep = (view.seldep == e.uuid)?(null):(e.uuid)"
               class = "btn btn-warning">Select department</button>
             <button class = "btn btn-success" ng-click = "submitEmp()"
-              ng-disabled = "ZeT.deepEquals(view.obj, e)">Commit</button>
+              ng-disabled = "NU != view.obj.uuid && ZeT.deepEquals(view.obj, e)">Commit</button>
           </div>
         </div>
       </form>
@@ -162,7 +175,7 @@
         <div class = "icons">
           <table>
             <tr>
-              <td><span ng-click = "view.obj.employee.department = d.uuid"
+              <td><span ng-click = "view.obj.employee.department = d.uuid; view.seldep = null"
                 class = "btn btn-icon"><i class = "fa fa-check-square-o"></i></span></td>
             </tr>
           </table>

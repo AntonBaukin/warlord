@@ -331,7 +331,7 @@ body.desktop .mainav
 
   &.glow
   {
-    box-shadow: 0 5px 25px 0 $border-frame-color;
+    box-shadow: 0 5px 150px 0 $border-frame-color;
   }
 
   &:not(.glow)
@@ -376,6 +376,14 @@ body.desktop .mainav
         text-align: center;
         letter-spacing: 4px;
       }
+    }
+
+    i.menu-bars
+    {
+      @include pointer;
+      position: absolute;
+      right: 0;
+      top: 25px;
     }
 
     li
@@ -445,7 +453,7 @@ section.content.page
   {
     position: relative;
     overflow: hidden;
-    margin-top: $font-size-h3;
+    padding-top: $font-size-h3;
     min-height: calc(100% - #{$font-size-h3});
 
     @media (min-width : $main-width)
@@ -453,6 +461,22 @@ section.content.page
       left: 50%;
       width: $main-width;
       margin-left: -$main-width * 0.5;
+    }
+
+    > .content-menu
+    {
+      @include clearfix;
+      margin: -$font-size-h3 * 0.75 0 $font-size-base;
+
+      .buttons
+      {
+        position: relative;
+
+        .right
+        {
+          float: right;
+        }
+      }
     }
 
     > .section-list-repeated

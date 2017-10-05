@@ -18,11 +18,7 @@
       <span ag-init = "$scope.fixWidth($element, 100)">Employees</span>
     </li>
 
-    <li class = "glue"></li>
-
-    <li class = "menu attention" ag-click = "content-hide content-about pulse+150" ag-opts = "{up:99}"
-      ag-class = "{'content-hide': '!active', 'content-about': 'active'}">
-      <span ag-init = "$scope.fixWidth($element, 100)">About this<br>application</span>
-    </li>
+    <i class = "menu-bars" ag-click = "toggle-content-menu" ag-opts = "{up:99}"
+      ag-class = "{'toggle-content-menu': '~active', 'content-hide': '!active'}"></i>
   </ul>
 </section>

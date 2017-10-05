@@ -66,8 +66,14 @@ ZeT.extend(AppData,
 		if(url == '/update/department')
 			return ZeT.deepClone(this.update$dep(obj))
 
+		if(url == '/save/department')
+			return ZeT.deepClone(this.save$dep(obj))
+
 		if(url == '/update/employee')
 			return ZeT.deepClone(this.update$emp(obj))
+
+		if(url == '/save/employee')
+			return ZeT.deepClone(this.save$emp(obj))
 	},
 
 	get$deps         : function()
@@ -125,6 +131,12 @@ ZeT.extend(AppData,
 		return this.data$deps[o.uuid] = o
 	},
 
+	save$dep         : function(o)
+	{
+		o.uuid = this.uuid() //<-- new uuid
+		return this.data$deps[o.uuid] = o
+	},
+
 	get$emps         : function()
 	{
 		if(this.data$emps)
@@ -175,6 +187,12 @@ ZeT.extend(AppData,
 	update$emp       : function(o)
 	{
 		ZeT.assertn(ZeT.get(this.data$emps, ZeT.asserts(o.uuid)))
+		return this.data$emps[o.uuid] = o
+	},
+
+	save$emp         : function(o)
+	{
+		o.uuid = this.uuid() //<-- new uuid
 		return this.data$emps[o.uuid] = o
 	},
 
