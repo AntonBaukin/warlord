@@ -252,6 +252,103 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		{
 			ZeT.assertn(n).height(ZeT.assertn(ref).height())
 		}
+
+		/**
+		 * Initializes date-time picker bootstrap component
+		 * for the given input field that is followed with
+		 * input-group-addon > button to click.
+		 */
+		$scope.initDatePicker = function(input, hidden)
+		{
+			ZeT.assert(input && input[0])
+			ZeT.assert(hidden && hidden[0])
+			ZeT.assert(hidden.is('input'))
+
+			var dp = hidden.datetimepicker({
+				showClear   : true,
+				format      : 'YYYY-MM-DDTHH:mm:ssZ',
+				keepOpen    : true,
+
+				icons       : {
+					time     : 'fa fa-clock-o',
+					date     : 'fa fa-calendar',
+					up       : 'fa fa-arrow-up',
+					down     : 'fa fa-arrow-down',
+					previous : 'fa fa-angle-double-left',
+					next     : 'fa fa-angle-double-right',
+					today    : 'fa fa-calendar-check-o',
+					clear    : 'fa fa-eraser',
+					close    : 'fa fa-times-circle'
+				}
+			}).data('DateTimePicker')
+
+			//!: hide picker on scope destroy
+			this.$on('$destroy', function(){ dp.hide() })
+
+			//~: toggle calendar on the following button
+			var btn = input.next('.input-group-addon').find('.btn')
+			if(btn.length == 1) btn.click(function(){ dp.toggle() })
+			input.click(function(){ dp.toggle() })
+
+			function absolutize(node)
+			{
+				var o = node.offset()
+				var h = node.outerHeight()
+
+				$(document.body).append(node.detach().css({
+					position: 'absolute',
+					top: o.top + 'px',
+					left: o.left + 'px',
+					height: h + 'px'
+				}))
+			}
+
+			//~: add date-only class on widget show
+			hidden.on('dp.show', function(e)
+			{
+				var widget = hidden.parent().find('.bootstrap-datetimepicker-widget')
+				ZeT.assert(widget.length == 1)
+				widget.addClass('date-only').data('DateTimePicker', dp)
+				dp.showTime = new Date().getTime()
+
+				//!: this hacks orders the picker to place properly
+				$(window).trigger('resize')
+				absolutize(widget)
+			})
+
+			//~: update model via change event
+			hidden.on('dp.change', function(e)
+			{
+				var v = (!e.date)?(''):moment(e.date).format()
+
+				//if(!e.date) dp.hide(); else
+				//	//?: {not only the time had changed}
+				//	if(e.oldDate && !e.date.isSame(e.oldDate, 'day'))
+				//		dp.hide()
+
+				ZeT.log('Value ', v)
+
+				//hidden.val(v).trigger('change')
+			})
+		}
+
+		//~: click on body to hide date-time picker
+		$(document.body).click(function(e)
+		{
+			//?: {clicked in a picker}
+			if($(e.target).closest('.bootstrap-datetimepicker-widget').length)
+				return
+
+			$('.bootstrap-datetimepicker-widget').each(function()
+			{
+				var dp = $(this).data('DateTimePicker')
+
+				//?: {not just shown}
+				if(dp && dp.showTime + 500 < new Date().getTime())
+					dp.hide()
+			})
+
+		})
 	})
 
 	/**

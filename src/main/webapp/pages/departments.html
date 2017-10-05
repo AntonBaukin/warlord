@@ -52,8 +52,13 @@
           <div class = "col-sm-4">
             <div class = "form-group">
               <label>Since</label>
-              <input type = "text" class = "form-control" readonly
-                ng-value = "d.head.since | date : 'MMMM d, yyyy' : 'UTC'">
+              <input type = "text" class = "date-input-value-copy" model = "d.head.since">
+              <div class = "input-group">
+                <input type = "text" class = "form-control" readonly
+                  ng-value = "d.head.since | date : 'MMMM d, yyyy' : 'UTC'"
+                  ag-init = "$scope.initDatePicker($element, $element.parent().prev())">
+                <div class = "input-group-addon"><span class = "btn btn-icon"><i class = "fa fa-calendar-o"></i></span></div>
+              </div>
             </div>
           </div>
         </div>

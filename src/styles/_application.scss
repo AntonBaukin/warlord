@@ -161,6 +161,11 @@ table
     padding: 0;
     border: none;
   }
+
+  th
+  {
+    font-weight: $headings-font-weight;
+  }
 }
 
 
@@ -234,9 +239,14 @@ form
   {
     font-weight: $font-weight-base;
 
-    &[disabled],  &[readonly], fieldset[disabled]
+    &[disabled],  &[readonly]
     {
       border-color: $input-border-disabled;
+
+      & + .input-group-addon
+      {
+        background-color: $input-bg-disabled;
+      }
     }
 
     @include field-placeholder() {
@@ -250,9 +260,48 @@ form
   }
 }
 
+input.date-input-value-copy
+{
+  height: 36px;
+  position: absolute;
+  visibility: hidden;
+  display: block;
+  width:0.1px;
+  z-index: -999;
+}
+
 .checkbox-inline
 {
   @include pointer
+}
+
+.input-group-addon
+{
+  padding: 0;
+  color: $input-color;
+  background-color: $input-bg;
+
+  > .btn
+  {
+    padding-top: $padding-base-vertical - 3px;
+    padding-bottom: $padding-base-vertical - 3px;
+  }
+}
+
+
+/* Date-Time Picker */
+
+.bootstrap-datetimepicker-widget.date-only
+{
+  .picker-switch td:first-child
+  {
+    display: none;
+  }
+
+  .timepicker
+  {
+    display: none;
+  }
 }
 
 
@@ -384,6 +433,7 @@ section.content.page
     position: relative;
     overflow: hidden;
     margin-top: $font-size-h3;
+    min-height: calc(100% - #{$font-size-h3});
 
     @media (min-width : $main-width)
     {
