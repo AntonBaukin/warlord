@@ -728,21 +728,6 @@ body.phone.menu-expanded article.content.page
 
 /* Content Page Well Wrapper */
 
-section.content.well-wrapper
-{
-  @include scroll-y;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  body.pulsing &
-  {
-    overflow: hidden;
-  }
-}
-
 body.desktop section.content.well-wrapper
 {
   top: $nav-height-desktop;

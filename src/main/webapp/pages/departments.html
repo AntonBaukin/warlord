@@ -1,8 +1,8 @@
 
 <!-- Departments List -->
 
-<section class = "content page invisible" ng-controller = "depsCtrl"
-  ag-class = "{'content-hide': 'invisible', 'content-departments': '!invisible'}"
+<section class = "content page hidden" ng-controller = "depsCtrl"
+  ag-class = "{'content-hide': 'hidden', 'content-departments': '!hidden'}"
   ag-init = "$scope.initScope()">
 
   <div class = "content-wrapper">
@@ -54,7 +54,7 @@
           </div>
         </div>
 
-        <div class = "row">
+        <div class = "row" ng-if = "NU != view.obj.uuid">
           <div class = "col-sm-8">
             <div class = "form-group">
               <label>Head</label>
@@ -62,7 +62,7 @@
             </div>
           </div>
 
-          <div class = "col-sm-4">
+          <div class = "col-sm-4" ng-if = "NU != view.obj.uuid">
             <div class = "form-group">
               <label>Since</label>
               <input type = "text" class = "date-input-value-copy" ng-model = "view.obj.head.since">
@@ -110,8 +110,7 @@
                 ><i class = "fa fa-eye"></i></span></td>
 
               <td ng-if = "view.selhead == d.uuid"><span class = "btn btn-icon"
-                ng-click = "view.obj.head.employee = e.uuid; view.emps = view.selhead = null"
-                ><i class = "fa fa-check-square-o"></i></span></td>
+                ng-click = "selHead(e)"><i class = "fa fa-check-square-o"></i></span></td>
             </tr>
           </table>
         </div>

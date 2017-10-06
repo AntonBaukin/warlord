@@ -5,20 +5,22 @@
   ag-class = "{'content-hide': 'glow', 'content-other': '!glow'}">
 
   <ul ag-trim>
-    <i class = "warlord-logo" ag-click = "content-hide content-main" ag-opts = "{up:99}"
-      ><span>WAR</span><span>Lord</span><span>Skeleton</span></i>
+    <i class = "warlord-logo" ag-click = "content-hide content-main pulsing+100"
+      ag-opts = "{up:99}"><span>WAR</span><span>Lord</span><span>Skeleton</span></i>
 
-    <li class = "menu" ag-click = "content-hide content-departments pulsing+10"
+    <li class = "menu" ag-click = "content-hide content-departments pulsing+100"
       ag-opts = "{up:99}" ag-class = "{'content-hide': '!active', 'content-departments': 'active'}">
       <span ag-init = "$scope.fixWidth($element, 100)">Departments</span>
     </li>
 
-    <li class = "menu" ag-click = "content-hide content-employees pulsing+10"
+    <li class = "menu" ag-click = "content-hide content-employees pulsing+100"
       ag-opts = "{up:99}" ag-class = "{'content-hide': '!active', 'content-employees': 'active'}">
       <span ag-init = "$scope.fixWidth($element, 100)">Employees</span>
     </li>
 
-    <i class = "menu-bars" ag-click = "toggle-content-menu" ag-opts = "{up:99}"
-      ag-class = "{'toggle-content-menu': '~active', 'content-hide': '!active'}"></i>
+    <i class = "menu-bars hidden" ag-click = "toggle-content-menu pulsing+100"
+      ag-opts = "{up:99}" ag-class = "{'toggle-content-menu': '~active',
+       'content-departments': '!hidden', 'content-employees': '!hidden',
+       'content-hide': '!active', 'content-main': 'hidden'}"></i>
   </ul>
 </section>

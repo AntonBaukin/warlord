@@ -76,8 +76,8 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		if(ZeT.isox(f)) //?: {has direct data}
 			return replaceData(f)
 
-		//?: {has no data for immediate answer}
-		if(r === true && globalData[u])
+		//?: {has data for immediate answer}
+		if(r !== true && globalData[u])
 			f.call(this, globalData[u])
 		else
 		{
@@ -107,6 +107,16 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 	 * NULL UUID used as null-object pattern.
 	 */
 	var NU = '00000000-0000-0000-0000-000000000000'
+
+	/**
+	 * Takes timestamp in arbitrary time zone and
+	 * makes it UTC date as via clearing zone shift.
+	 */
+	function utc(m)
+	{
+		return moment.utc([ (m = moment(m)).get('year'),
+		  m.get('month'),  m.get('date'), 0, 0, 0, 0 ])
+	}
 
 	//~: root controller
 	main.controller('root', function($scope, $element, $timeout, $sanitize)
@@ -192,14 +202,12 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 
 				ZeT.timeout(100, function()
 				{
-					$scope.$broadcast('pulsing')
-
 					ZeT.timeout(400, function(){
 						$scope.$broadcast('content-' + pageHash())
 					})
 
 					ZeT.timeout(600, function(){
-						$scope.$broadcast('pulse')
+						$scope.$broadcast('pulsing')
 					})
 				})
 			})
@@ -282,16 +290,6 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			ZeT.assert(input && input[0])
 			ZeT.assert(hidden && hidden[0])
 			ZeT.assert(hidden.is('input'))
-
-			/**
-			 * Takes timestamp in arbitrary time zone and
-			 * makes it UTC date via clearing zone shift.
-			 */
-			function utc(m)
-			{
-				return moment.utc([ (m = moment(m)).get('year'),
-				  m.get('month'),  m.get('date'), 0, 0, 0, 0 ])
-			}
 
 			var dp = hidden.datetimepicker({
 				showClear   : true,
@@ -553,6 +551,25 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 				})
 			}
 		}
+
+		//~: selects department head
+		$scope.selHead = function(e)
+		{
+			var v = $scope.view;	ZeT.assertn(v.obj)
+			ZeT.assert(ZeT.isox(e) && !ZeT.ises(e.uuid))
+
+			if(!v.obj.head) v.obj.head = {}
+
+			//=: set the employee
+			v.obj.head.employee = e.uuid
+
+			//~: hide the employees list
+			v.emps = v.selhead = null
+
+			//?: {has no date field}
+			if(ZeT.ises(v.obj.head.since))
+				v.obj.head.since = utc(moment()).toDate().toISOString()
+		}
 	})
 
 	//~: employees controller
@@ -565,9 +582,9 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		//~: load the data
 		$scope.$on('content-departments', $scope.initScope = function()
 		{
-			loadData('/get/departments', function(deps)
+			loadData('/get/employees', function(emps)
 			{
-				loadData('/get/employees', function(emps)
+				loadData(true, '/get/departments', function(deps)
 				{
 					$scope.deps = deps
 					$scope.emps = insertNullObject(emps)

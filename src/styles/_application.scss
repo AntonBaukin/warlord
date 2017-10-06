@@ -66,6 +66,22 @@ b, strong
   }
 }
 
+@mixin basic-typography()
+{
+  p
+  {
+    @include hyphens-auto;
+    text-align: justify;
+
+    a, a:hover, a:focus
+    {
+      cursor: pointer;
+      color: $text-color-strong;
+      text-decoration: underline;
+    }
+  }
+}
+
 
 /* Animation */
 
@@ -634,5 +650,159 @@ section.content.page
         @include else-bg($well-bg-alter-odd)
       }
     }
+  }
+}
+
+
+/* Content Well General */
+
+section.content.well-wrapper
+{
+  @include scroll-y;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  body.pulsing &
+  {
+    overflow: hidden;
+  }
+}
+
+body.desktop section.content.well-wrapper
+{
+  top: $nav-height-desktop;
+}
+
+@mixin well-general()
+{
+  overflow: hidden;
+
+  > .content-wrapper
+  {
+    @include basic-typography;
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    padding: $well-padding;
+    background-color: $well-bg;
+    border: 1px solid $border-frame-color;
+
+    > h3
+    {
+      text-align: center;
+      letter-spacing: 0.5px;
+      font-weight: 100;
+    }
+
+    > h3:first-child
+    {
+      margin: 0 0 floor($font-size-h3 * 1.44) 0;
+    }
+  }
+
+  &:not(.open) > .content-wrapper > *
+  {
+    display: none !important;
+  }
+}
+
+@mixin abswellheight-desktop($height)
+{
+  position: absolute;
+  top: 0;
+  margin-top: 0;
+  height: $height * 1.25;
+  padding-bottom: $height * 0.25;
+
+  @media (min-height : $height + $nav-height-desktop * 2)
+  {
+    top: 50%;
+    height: $height;
+    padding-bottom: 0;
+    margin-top: -($height + $nav-height-desktop) * 0.5;
+  }
+}
+
+
+/* Content Well Horizontal */
+
+@mixin well-horizontal()
+{
+  > .content-wrapper
+  {
+    padding: $well-padding 15%;
+    border-width: 0 1px 0 1px;
+
+    &::before, &::after
+    {
+      content: "";
+      display: block;
+      position: absolute;
+      width: $well-padding * 2;
+    }
+
+    &::before
+    {
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background: linear-gradient(to right, darken($well-border, 20%) 0, darken($well-border, 40%) 20%, rgba(darken($well-border, 40%), 0.01) 100% );
+    }
+
+    &::after
+    {
+      top: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(to left, darken($well-border, 20%) 0, darken($well-border, 40%) 20%, rgba(darken($well-border, 40%), 0.01) 100% );
+    }
+
+    p.footer
+    {
+      position: absolute;
+      bottom: $well-padding;
+    }
+
+    p.right
+    {
+      position: absolute;
+      text-align: right;
+      right: 15%;
+    }
+  }
+
+  &:not(.open)
+  {
+    transition: margin-left 0.5s, width 0.5s;
+  }
+
+  &.collapsed
+  {
+    width: 0;
+    margin-left: 0;
+    transition: 0s;
+  }
+}
+
+
+/* Main Page (About) */
+
+article.content.well.about
+{
+  @include well-general;
+
+  body.desktop &
+  {
+    @include well-horizontal;
+    @include abswidth($main-width);
+    @include abswellheight-desktop($main-width * 0.65);
+  }
+
+  > .content-wrapper
+  {
+    font-size: $font-size-h5;
   }
 }

@@ -1,1 +1,47 @@
-<section></section>
+
+<!-- About the Project -->
+
+<section class = "content well-wrapper"
+  ag-if = "!content-hide content-main">
+
+  <article class = "content well collapsed about"
+    ag-class = "{pulsing: '!collapsed open+500'}">
+
+    <div class = "content-wrapper">
+      <h3>About WARLord Skeleton Project</h3>
+    
+      <p>
+        I've created <a href = 'https://github.com/AntonBaukin/embeddy'
+        target = '_blank'>Embeddy</a> OSGi application skeleton that packs in
+        standalone JAR file OSGi application and all it's bundles, integrates Spring
+        Framework 4 MVC with OSGi HTTP Service provided by embedded Jetty server, and
+        applies Nashorn JavaScript engine to server-side scripting on the base of
+        ZeT JS library — JsX facility.
+      </p>
+
+      <p>
+        <a href = 'https://github.com/AntonBaukin/embeddy' target = '_blank'>WARLord</a>
+        skeleton is much simpler as it's ordinary WAR application to run in standard
+        Java servlet container, such as Apache Tomcat, or in an application server.
+        In includes the same core components as Embeddy.
+      </p>
+
+      <p>
+        This sample web application is simple in nature, but the implementation
+        has no brute simplifications. There are Employees working in Departments,
+        related N-to-1, and 1-to-1: department has a head that is one of it's
+        employees. Data are stored in single table in document-oriented form.
+        Each object has one or more projections that are merged by web controllers
+        to represent object as a whole document. Web UI is a single page application
+        on Angular JS framework with my favourite Anger module. Spring MVC connects
+        the web with the backend. Data access is with plain SQL — I've retired from
+        ORM to documents and related projections.
+      </p>
+
+      <p class = "footer right">
+        Thanks for Your attention, Baukin Anton.<br>
+        <a href = "mailto:%22Anton%20Baukin%22%3canton.baukin@gmail.com">anton.baukin@gmail.com</a>
+      </p>
+    </div>
+  </article>
+</section>
