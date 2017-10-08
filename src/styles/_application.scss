@@ -28,6 +28,19 @@ b, strong
   font-weight: $headings-font-weight;
 }
 
+h3
+{
+  body.tablet &
+  {
+    font-size: $font-size-h4 * 1.22;
+  }
+
+  body.phone &
+  {
+    font-size: $font-size-h4;
+  }
+}
+
 @mixin pointer()
 {
   cursor: pointer;
@@ -47,8 +60,8 @@ b, strong
 @mixin font-thin-large()
 {
   font-weight: $font-weight-base;
-  font-size: $font-size-h6;
-  line-height: $font-size-h6 * 1.1;
+  font-size: $font-size-h6 * 1.1;
+  line-height: $font-size-h6 * 1.22;
 
   @media (min-width : $tablet-width)
   {
@@ -144,14 +157,6 @@ b, strong
   }
 }
 
-@mixin abswidth($width)
-{
-  position: absolute;
-  left: 50%;
-  margin-left: -$width * 0.5;
-  width: $width;
-}
-
 @mixin clearfix()
 {
   &::before, &::after
@@ -182,6 +187,12 @@ table
   {
     font-weight: $headings-font-weight;
   }
+}
+
+.cell-bottom
+{
+  display: table-cell;
+  vertical-align: bottom;
 }
 
 
@@ -334,20 +345,24 @@ input.date-input-value-copy
 }
 
 
-/* Navigation Bar (Desktop) */
+/* Navigation Bar (General, Desktop) */
 
 $nav-height-desktop : 100px;
 
-body.desktop .mainav
+.mainav
 {
-  margin-top: 5px;
-  height: $nav-height-desktop - 20px;
   background: linear-gradient(to bottom, $gray-darker 0, $gray-darkest 100%);
   border-top: 1px solid $border-frame-color;
 
-  &.glow
+  body.desktop &
   {
-    box-shadow: 0 5px 150px 0 $border-frame-color;
+    margin-top: 5px;
+    height: $nav-height-desktop - 20px;
+
+    &.glow
+    {
+      box-shadow: 0 5px 150px 0 $border-frame-color;
+    }
   }
 
   &:not(.glow)
@@ -358,26 +373,33 @@ body.desktop .mainav
   ul
   {
     @include list-unstyled;
-
-    @media (min-width : $main-width)
-    {
-      @include main-width-center;
-    }
-
-    height: $nav-height-desktop - 21px;
-    padding: 0 0 0 150px;
     margin: 0;
+
+    body.desktop &
+    {
+      height: $nav-height-desktop - 21px;
+      padding: 0 0 0 150px;
+
+      @media (min-width : $main-width)
+      {
+        @include main-width-center;
+      }
+    }
 
     i.warlord-logo
     {
       @include pointer;
       position: absolute;
-      margin: 16px 0 0 -150px;
       display: inline-block;
       font-weight: $font-weight-thin;
-      font-size: 28px;
       font-style: normal;
-      line-height: 24px;
+
+      body.desktop &
+      {
+        margin: 16px 0 0 -150px;
+        font-size: 28px;
+        line-height: 24px;
+      }
 
       span:nth-child(1)
       {
@@ -387,10 +409,14 @@ body.desktop .mainav
       span:nth-child(3)
       {
         display: block;
-        font-size: 22px;
         font-style: italic;
         text-align: center;
-        letter-spacing: 4px;
+
+        body.desktop &
+        {
+          font-size: 22px;
+          letter-spacing: 4px;
+        }
       }
     }
 
@@ -399,17 +425,24 @@ body.desktop .mainav
       @include pointer;
       position: absolute;
       right: 0;
-      top: 25px;
+
+      body.desktop &
+      {
+        top: 25px;
+      }
     }
 
     li
     {
       @include font-thin-large;
-
       display: table-cell;
-      height: $nav-height-desktop - 21px;
       vertical-align: middle;
       white-space: nowrap;
+
+      body.desktop &
+      {
+        height: $nav-height-desktop - 21px;
+      }
 
       span
       {
@@ -418,7 +451,7 @@ body.desktop .mainav
         padding: 0 10px;
       }
 
-      span.fixed
+      span.fixed-width
       {
         padding: 0;
       }
@@ -438,14 +471,6 @@ body.desktop .mainav
         {
           background-color: $secondary-color;
         }
-
-        &.attention
-        {
-          position: relative;
-          left: 10px;
-          color: $attention-color;
-          font-weight: $font-weight-base;
-        }
       }
 
       &.glue
@@ -457,32 +482,155 @@ body.desktop .mainav
   }
 }
 
+/* Navigation Bar (Tablet) */
+
+$nav-height-tablet : 65px;
+
+body.tablet .mainav
+{
+  padding-top: 5px;
+  height: $nav-height-tablet - 15px;
+
+  &.glow
+  {
+    box-shadow: 0 3px 50px 0 $border-frame-color;
+  }
+
+  ul
+  {
+    height: $nav-height-tablet - 25px;
+    padding: 0 40px 0 90px;
+
+    @media (min-width : $main-width)
+    {
+      @include main-width-center;
+    }
+
+    i.warlord-logo
+    {
+      margin: 1px 0 0 -85px;
+      font-size: 20px;
+      line-height: 18px;
+
+      span:nth-child(3)
+      {
+        font-size: 18px;
+        letter-spacing: 2px;
+      }
+    }
+
+    i.menu-bars
+    {
+      top: 12px;
+      width: 26px;
+      height: 21.9375px;
+      right: 10px;
+    }
+
+    li
+    {
+      height: $nav-height-tablet - 25px;
+    }
+  }
+}
+
+
+/* Navigation Bar (Phone) */
+
+$nav-height-phone : 45px;
+
+body.phone .mainav
+{
+  padding-top: 1px;
+  height: $nav-height-phone - 9px;
+
+  &.glow
+  {
+    box-shadow: 0 3px 50px 0 $border-frame-color;
+  }
+
+  ul
+  {
+    height: $nav-height-phone - 13px;
+    padding: 0 40px 0 75px;
+
+    @media (min-width : $main-width)
+    {
+      @include main-width-center;
+    }
+
+    i.warlord-logo
+    {
+      margin: 1px 0 0 -70px;
+      font-size: 16px;
+      line-height: 15px;
+
+      span:nth-child(3)
+      {
+        font-size: 14px;
+        letter-spacing: 2px;
+      }
+    }
+
+    i.menu-bars
+    {
+      top: 9px;
+      width: 20px;
+      height: 16.875px;
+      right: 10px;
+    }
+
+    li
+    {
+      height: $nav-height-phone - 13px;
+
+      span
+      {
+        padding: 0 5px;
+      }
+    }
+  }
+}
+
+
 
 /* Content Page (General, Desktop) */
 
 section.content.page
 {
   @include abscroll;
-  top: $nav-height-desktop;
+
+  body.desktop &
+  {
+    top: $nav-height-desktop;
+  }
 
   > .content-wrapper
   {
     position: relative;
     overflow: hidden;
-    padding-top: $font-size-h3;
-    min-height: calc(100% - #{$font-size-h3});
 
-    @media (min-width : $main-width)
+    body.desktop &
     {
-      left: 50%;
-      width: $main-width;
-      margin-left: -$main-width * 0.5;
+      padding-top: $font-size-h3;
+      min-height: calc(100% - #{$font-size-h3});
+
+      @media (min-width : $main-width)
+      {
+        left: 50%;
+        width: $main-width;
+        margin-left: -$main-width * 0.5;
+      }
     }
 
     > .content-menu
     {
       @include clearfix;
-      margin: -$font-size-h3 * 0.75 0 $font-size-base;
+
+      body.desktop &
+      {
+        margin: -$font-size-h3 * 0.75 0 $font-size-base;
+      }
 
       .buttons
       {
@@ -589,12 +737,6 @@ section.content.page
           font-size: $font-size-h5 * 1.22;
         }
 
-        .abs-bottom
-        {
-          position: absolute;
-          bottom: 0;
-        }
-
         > .buttons
         {
           @include clearfix;
@@ -654,6 +796,199 @@ section.content.page
 }
 
 
+/* Content Page (Tablet) */
+
+body.tablet section.content.page
+{
+  top: $nav-height-tablet;
+
+  > .content-wrapper
+  {
+    min-height: 100%;
+
+    > .content-menu
+    {
+       margin: 0 10px $font-size-base;
+    }
+
+    > .section-list-repeated
+    {
+      padding: 0.5 * $font-size-base 0.75 * $font-size-base;
+
+      & + .section-list-repeated, & + .section-list-sep
+      {
+        margin-top: 0.75 * $font-size-base;
+      }
+
+      &.inner
+      {
+        margin-left: 1.5 * $font-size-base;
+        margin-right: 1.5 * $font-size-base;
+      }
+
+      > .compacted.line
+      {
+        > div
+        {
+          font-size: $font-size-h5;
+          line-height: $font-size-h5 * 1.22;
+        }
+
+        > .sep
+        {
+          top: -0.5 * $font-size-base;
+          bottom: -0.5 * $font-size-base;
+          margin-left: -0.25 * $font-size-base;
+
+          & + div
+          {
+            padding-left: 0.25 * $font-size-base;
+          }
+        }
+
+        > .icons
+        {
+          right: -$font-size-base * 0.5;
+          top: -0.5 * $font-size-base;
+          bottom: -0.5 * $font-size-base;
+        }
+      }
+
+      > .expanded.block
+      {
+        label
+        {
+          font-size: $font-size-h5;
+          letter-spacing: 0.5px;
+        }
+
+        .form-control
+        {
+          font-size: $font-size-h5 * 1.11;
+        }
+
+        > .buttons
+        {
+          margin-top: $font-size-h5 * 1.22;
+
+          .btn + .btn
+          {
+            margin-left: $font-size-h5 * 0.75;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+/* Content Page (Phone) */
+
+body.phone section.content.page
+{
+  top: $nav-height-phone;
+
+  > .content-wrapper
+  {
+    min-height: 100%;
+
+    > .content-menu
+    {
+       margin: 0 10px $font-size-base;
+    }
+
+    > .section-list-repeated
+    {
+      padding: 0.5 * $font-size-base 0.5 * $font-size-base;
+
+      & + .section-list-repeated, & + .section-list-sep
+      {
+        margin-top: 0.5 * $font-size-base;
+      }
+
+      &.inner
+      {
+        margin-left: 1 * $font-size-base;
+        margin-right: 1 * $font-size-base;
+      }
+
+      > .compacted.line
+      {
+        > div
+        {
+          font-size: $font-size-h5;
+          line-height: $font-size-h5 * 1.22;
+        }
+
+        > .sep
+        {
+          top: -0.5 * $font-size-base;
+          bottom: -0.5 * $font-size-base;
+          margin-left: -0.25 * $font-size-base;
+
+          & + div
+          {
+            padding-left: 0.25 * $font-size-base;
+          }
+        }
+
+        > .icons
+        {
+          right: -$font-size-base * 0.5;
+          top: -0.5 * $font-size-base;
+          bottom: -0.5 * $font-size-base;
+        }
+      }
+
+      > .expanded.block
+      {
+        label
+        {
+          font-size: $font-size-base;
+          letter-spacing: 0.5px;
+        }
+
+        .form-control
+        {
+          font-size: $font-size-base;
+        }
+
+        > .buttons
+        {
+          margin-top: $font-size-base;
+
+          > div
+          {
+            display: block;
+          }
+
+          > div + div
+          {
+            margin-top: $font-size-base * 0.5;
+          }
+
+          .btn
+          {
+            display: block;
+            width: 100%;
+          }
+
+          .btn + .btn
+          {
+            margin: $font-size-base * 0.5 0 0 0;
+          }
+
+          .left, .right
+          {
+            float: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+
 /* Content Well General */
 
 section.content.well-wrapper
@@ -669,12 +1004,24 @@ section.content.well-wrapper
   {
     overflow: hidden;
   }
+
+  body.desktop &
+  {
+    top: $nav-height-desktop;
+    max-height: calc(100% - #{$nav-height-desktop});
+  }
+
+  body.tablet &
+  {
+    top: $nav-height-tablet;
+  }
+
+  body.phone &
+  {
+    top: $nav-height-phone;
+  }
 }
 
-body.desktop section.content.well-wrapper
-{
-  top: $nav-height-desktop;
-}
 
 @mixin well-general()
 {
@@ -685,10 +1032,24 @@ body.desktop section.content.well-wrapper
     @include basic-typography;
     position: relative;
     width: 100%;
-    min-height: 100%;
     padding: $well-padding;
     background-color: $well-bg;
     border: 1px solid $border-frame-color;
+
+    body.desktop &
+    {
+      font-size: $font-size-h5;
+    }
+
+    body.tablet &
+    {
+      font-size: $font-size-base;
+    }
+
+    body.phone &
+    {
+      font-size: $font-size-base * 0.9;
+    }
 
     > h3
     {
@@ -699,30 +1060,28 @@ body.desktop section.content.well-wrapper
 
     > h3:first-child
     {
-      margin: 0 0 floor($font-size-h3 * 1.44) 0;
+      margin: 0 0 $font-size-h4 0;
+
+      body.desktop &
+      {
+        margin: 0 0 floor($font-size-h3 * 1.44) 0;
+      }
+    }
+
+    p.footer
+    {
+      margin-bottom: 0;
+    }
+
+    p.right
+    {
+      text-align: right;
     }
   }
 
   &:not(.open) > .content-wrapper > *
   {
-    display: none !important;
-  }
-}
-
-@mixin abswellheight-desktop($height)
-{
-  position: absolute;
-  top: 0;
-  margin-top: 0;
-  height: $height * 1.25;
-  padding-bottom: $height * 0.25;
-
-  @media (min-height : $height + $nav-height-desktop * 2)
-  {
-    top: 50%;
-    height: $height;
-    padding-bottom: 0;
-    margin-top: -($height + $nav-height-desktop) * 0.5;
+    visibility: hidden !important;
   }
 }
 
@@ -733,7 +1092,7 @@ body.desktop section.content.well-wrapper
 {
   > .content-wrapper
   {
-    padding: $well-padding 15%;
+    padding: $well-padding $well-padding * 4;
     border-width: 0 1px 0 1px;
 
     &::before, &::after
@@ -759,19 +1118,6 @@ body.desktop section.content.well-wrapper
       right: 0;
       background: linear-gradient(to left, darken($well-border, 20%) 0, darken($well-border, 40%) 20%, rgba(darken($well-border, 40%), 0.01) 100% );
     }
-
-    p.footer
-    {
-      position: absolute;
-      bottom: $well-padding;
-    }
-
-    p.right
-    {
-      position: absolute;
-      text-align: right;
-      right: 15%;
-    }
   }
 
   &:not(.open)
@@ -788,21 +1134,79 @@ body.desktop section.content.well-wrapper
 }
 
 
+/* Content Well Vertical */
+
+@mixin well-vertical()
+{
+  > .content-wrapper
+  {
+    border-width: 1px 0 1px 0;
+
+    &::before, &::after
+    {
+      content: "";
+      display: block;
+      position: absolute;
+      height: $well-padding;
+    }
+
+    &::before
+    {
+      left: 0;
+      top: 0;
+      right: 0;
+      background: linear-gradient(to bottom, darken($well-border, 20%) 0, darken($well-border, 40%) 20%, rgba(darken($well-border, 40%), 0.01) 100% );
+    }
+
+    &::after
+    {
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(to top, darken($well-border, 20%) 0, darken($well-border, 40%) 20%, rgba(darken($well-border, 40%), 0.01) 100% );
+    }
+  }
+
+  &:not(.open)
+  {
+    transition: height 0.5s;
+  }
+
+  &.collapsed
+  {
+    height: 0 !important;
+    transition: 0s;
+  }
+}
+
+
 /* Main Page (About) */
 
-article.content.well.about
+article.content.well.general
 {
   @include well-general;
+
+  @mixin abswidth($width)
+  {
+    position: absolute;
+    left: 50%;
+    margin-left: -$width * 0.5;
+    width: $width;
+
+    > .content-wrapper
+    {
+      width: $width;
+    }
+  }
 
   body.desktop &
   {
     @include well-horizontal;
     @include abswidth($main-width);
-    @include abswellheight-desktop($main-width * 0.65);
   }
 
-  > .content-wrapper
+  body.tablet &, body.phone &
   {
-    font-size: $font-size-h5;
+    @include well-vertical;
   }
 }

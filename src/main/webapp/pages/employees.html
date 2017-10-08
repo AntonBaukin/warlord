@@ -34,7 +34,7 @@
 
       <form class = "expanded block" ng-if = "view.obj.uuid == e.uuid">
         <div class = "row">
-          <div class = "col-md-4 col-sm-12">
+          <div class = "col-sm-4 col-xs-12">
             <div class = "form-group first-name">
               <label>First name</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.firstName"
@@ -42,14 +42,14 @@
             </div>
           </div>
 
-          <div class = "col-md-4 col-sm-12">
+          <div class = "col-sm-4 col-xs-12">
             <div class = "form-group">
               <label>Middle name</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.middleName">
             </div>
           </div>
 
-          <div class = "col-md-4 col-sm-12">
+          <div class = "col-sm-4 col-xs-12">
             <div class = "form-group last-name">
               <label>Last name</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.lastName"
@@ -59,7 +59,7 @@
         </div>
 
         <div class = "row">
-          <div class = "col-md-4 col-sm-12">
+          <div class = "col-md-4 col-sm-6 col-xs-12">
             <div class = "form-group">
               <label>Date of birth</label>
               <input type = "text" class = "date-input-value-copy" ng-model = "view.obj.dob">
@@ -72,29 +72,33 @@
             </div>
           </div>
 
-          <div ag-trim class = "col-md-8 col-sm-12"
-            ag-init = "$scope.matchHeight($element, $element.prev())">
-            <div class = "form-group abs-bottom">
-              <span class = "checkbox checkbox-inline" ng-click = "view.obj.sex = (view.obj.sex == 'M')?(null):('M')">
-                <input type = "checkbox" ng-checked = "view.obj.sex == 'M'"><label>Male</label>
-              </span>
+          <div ag-trim class = "col-md-8 col-sm-6 col-xs-12">
+            <div class = "form-group">
+              <label>Sex</label>
+              <div class = "cell-bottom" ag-init = "$scope.matchHeight($element,
+                $element.parent().parent().prev().find('.form-control'))">
 
-              <span class = "checkbox checkbox-inline" ng-click = "view.obj.sex = (view.obj.sex == 'F')?(null):('F')">
-                <input type = "checkbox" ng-checked = "view.obj.sex == 'F'"><label>Female</label>
-              </span>
+                <span class = "checkbox checkbox-inline" ng-click = "view.obj.sex = (view.obj.sex == 'M')?(null):('M')">
+                  <input type = "checkbox" ng-checked = "view.obj.sex == 'M'"><label>Male</label>
+                </span>
+
+                <span class = "checkbox checkbox-inline" ng-click = "view.obj.sex = (view.obj.sex == 'F')?(null):('F')">
+                  <input type = "checkbox" ng-checked = "view.obj.sex == 'F'"><label>Female</label>
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
         <div class = "row">
-          <div class = "col-md-6 col-sm-12">
+          <div class = "col-sm-6 col-xs-12">
             <div class = "form-group">
               <label>Personal email</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.email">
             </div>
           </div>
 
-          <div class = "col-md-6 col-sm-12">
+          <div class = "col-sm-6 col-xs-12">
             <div class = "form-group">
               <label>Personal phone</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.phone">
@@ -103,7 +107,7 @@
         </div>
 
         <div class = "row">
-          <div class = "col-sm-12">
+          <div class = "col-xs-12">
             <div class = "form-group">
               <label>Home address</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.address">
@@ -112,14 +116,14 @@
         </div>
 
         <div class = "row">
-          <div class = "col-md-8 col-sm-12">
+          <div class = "col-md-8 col-sm-6 col-xs-12">
             <div class = "form-group">
               <label>Works in department</label>
               <input type = "text" class = "form-control" readonly ng-value = "depName(view.obj)">
             </div>
           </div>
 
-          <div class = "col-md-4 col-sm-12">
+          <div class = "col-md-4 col-sm-6 col-xs-12">
             <div class = "form-group">
               <label>Since</label>
               <input type = "text" class = "date-input-value-copy" ng-model = "view.obj.employee.hired">
@@ -134,14 +138,14 @@
         </div>
 
         <div class = "row">
-          <div class = "col-md-6 col-sm-12">
+          <div class = "col-sm-6 col-xs-12">
             <div class = "form-group">
               <label>Work email</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.employee.email">
             </div>
           </div>
 
-          <div class = "col-md-6 col-sm-12">
+          <div class = "col-sm-6 col-xs-12">
             <div class = "form-group">
               <label>Work phone</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.employee.phone">

@@ -21,11 +21,11 @@
 <body lang = "en" ng-controller = "root" class = "{{win.target}}"
   ag-class = "{'menu-expand': '~menu-expanded', pulsing: 'pulsing=1000'}">
 
-  <ng-include src = "'pages/main.html'"
-    onload = "pageLoaded('main', 1, 4)"></ng-include>
-
   <ng-include src = "'pages/menu.html'"
-    onload = "pageLoaded('menu', 2, 4)"></ng-include>
+    onload = "pageLoaded('menu', 1, 4)"></ng-include>
+
+  <ng-include src = "'pages/main.html'"
+    onload = "pageLoaded('main', 2, 4)"></ng-include>
 
   <ng-include src = "'pages/departments.html'"
     onload = "pageLoaded('departments', 3, 4)"></ng-include>

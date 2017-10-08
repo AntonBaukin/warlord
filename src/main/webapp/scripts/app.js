@@ -224,8 +224,12 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		})
 
 		//~: window resize
-		$(window).on('resize', onDocSize)
 		$scope.$on('index-is-ready', onDocSize)
+		$(window).on('resize', function()
+		{
+			onDocSize.apply(this, arguments)
+			$scope.$broadcast('win-resize')
+		})
 
 		//~: on document size
 		function onDocSize()
@@ -264,16 +268,60 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		$scope.fixWidth = function(n, delay)
 		{
 			ZeT.assert(ZeT.isn(delay) && delay >= 0)
-			ZeT.timeout(delay, function(){
+			ZeT.timeout(delay, function()
+			{
+				//~: clear the width to natural
+				n.css('width', '').removeClass('fixed-width')
+
+				//~: fix that width
 				n.css('width', ZeTS.cat(n.outerWidth(), 'px')).
-				  addClass('fixed')
+				  addClass('fixed-width')
 			})
 		}
 
-		//~: makes the node height patch the reference
-		$scope.matchHeight = function(n, ref)
+		/**
+		 * For this given node makes it to be in the middle
+		 * of the reference component (defaults to the parent).
+		 * If node goes over the parent's top, it's set to
+		 * be at the top instead. Set the reference false
+		 * to reset the styling
+		 */
+		$scope.absMiddle = function(n, r)
 		{
-			ZeT.assertn(n).height(ZeT.assertn(ref).height())
+			ZeT.assert(n && n[0])
+			if(ZeT.isu(r)) r = n.parent()
+			ZeT.assert((r && r[0]) || r === false)
+
+			if(r === false) //?: {reset}
+				n.css({ top: '', marginTop: ''})
+
+			var y0 = n.parent().offset().top
+			var h1 = n.outerHeight()
+			var m  = (r.offset().top - y0 - h1) * 0.5
+			var yX = (n.parent().outerHeight() >> 1) + m
+
+			//?: {over the top}
+			if(yX <= 0) n.css({ top: '0', marginTop: '' })
+			else  n.css({ top: '50%', marginTop: m + 'px' })
+
+			return n
+		}
+
+		/**
+		 * Makes the node height patch the reference's.
+		 * If reference is false, resets the height.
+		 * Optional scale factor may be given.
+		 *
+		 */
+		$scope.matchHeight = function(n, ref, scale)
+		{
+			ZeT.assert(n && n[0])
+
+			if(ref === false)
+				return n.css('height', '')
+
+			ZeT.assert(ref && ref[0])
+			return n.height(ref.outerHeight() * (ZeT.isn(scale)?scale:1))
 		}
 
 		/**

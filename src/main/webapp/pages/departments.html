@@ -39,14 +39,14 @@
         </div>
 
         <div class = "row">
-          <div class = "col-md-6 col-sm-12">
+          <div class = "col-sm-6 col-xs-12">
             <div class = "form-group">
               <label>Office</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.office">
             </div>
           </div>
 
-          <div class = "col-md-6 col-sm-12">
+          <div class = "col-sm-6 col-xs-12">
             <div class = "form-group">
               <label>Phone</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.phone">
@@ -55,14 +55,14 @@
         </div>
 
         <div class = "row" ng-if = "NU != view.obj.uuid">
-          <div class = "col-sm-8">
+          <div class = "col-md-8 col-sm-6 col-xs-12">
             <div class = "form-group">
               <label>Head</label>
               <input type = "text" class = "form-control" readonly ng-value = "headName(view.obj)">
             </div>
           </div>
 
-          <div class = "col-sm-4" ng-if = "NU != view.obj.uuid">
+          <div class = "col-md-4 col-sm-6 col-xs-12" ng-if = "NU != view.obj.uuid">
             <div class = "form-group">
               <label>Since</label>
               <input type = "text" class = "date-input-value-copy" ng-model = "view.obj.head.since">

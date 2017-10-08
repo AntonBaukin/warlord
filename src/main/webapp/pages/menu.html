@@ -1,8 +1,8 @@
 
 <!-- Navigation Bar (Desktop) -->
 
-<section class = "mainav glow" ag-if = "!win-retarget win-desktop"
-  ag-class = "{'content-hide': 'glow', 'content-other': '!glow'}">
+<section class = "mainav glow" ag-class = "{'content-hide': 'glow',
+  'content-other': '!glow'}">
 
   <ul ag-trim>
     <i class = "warlord-logo" ag-click = "content-hide content-main pulsing+100"
@@ -10,12 +10,14 @@
 
     <li class = "menu" ag-click = "content-hide content-departments pulsing+100"
       ag-opts = "{up:99}" ag-class = "{'content-hide': '!active', 'content-departments': 'active'}">
-      <span ag-init = "$scope.fixWidth($element, 100)">Departments</span>
+      <span ag-on = "win-retarget" ag-on-win-retarget = "$scope.fixWidth($element, 100)"
+        ag-init = "$scope.fixWidth($element, 1000)">Departments</span>
     </li>
 
     <li class = "menu" ag-click = "content-hide content-employees pulsing+100"
       ag-opts = "{up:99}" ag-class = "{'content-hide': '!active', 'content-employees': 'active'}">
-      <span ag-init = "$scope.fixWidth($element, 100)">Employees</span>
+      <span ag-on = "win-retarget" ag-on-win-retarget = "$scope.fixWidth($element, 100)"
+        ag-init = "$scope.fixWidth($element, 1000)">Employees</span>
     </li>
 
     <i class = "menu-bars hidden" ag-click = "toggle-content-menu pulsing+100"
