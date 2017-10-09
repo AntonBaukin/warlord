@@ -293,7 +293,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			ZeT.assert((r && r[0]) || r === false)
 
 			if(r === false) //?: {reset}
-				n.css({ top: '', marginTop: ''})
+				return n.css({ top: '', marginTop: ''})
 
 			var y0 = n.parent().offset().top
 			var h1 = n.outerHeight()

@@ -13,7 +13,7 @@
       <div class = "buttons">
         <div class = "right">
           <btn ng-click = "view.obj = emps[NU]"
-            class = "btn btn-warning">Add employee</btn>
+            class = "btn btn-warning">{{Content.emps.add}}</btn>
         </div>
       </div>
     </div>
@@ -36,24 +36,24 @@
         <div class = "row">
           <div class = "col-sm-4 col-xs-12">
             <div class = "form-group first-name">
-              <label>First name</label>
+              <label>{{Content.emps.first}}</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.firstName"
-                placeholder = "Set required first name…">
+                placeholder = "{{Content.emps.firstplace}}">
             </div>
           </div>
 
           <div class = "col-sm-4 col-xs-12">
             <div class = "form-group">
-              <label>Middle name</label>
+              <label>{{Content.emps.middle}}</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.middleName">
             </div>
           </div>
 
           <div class = "col-sm-4 col-xs-12">
             <div class = "form-group last-name">
-              <label>Last name</label>
+              <label>{{Content.emps.last}}</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.lastName"
-                placeholder = "Set required last name…">
+                placeholder = "{{Content.emps.lastplace}}">
             </div>
           </div>
         </div>
@@ -61,11 +61,11 @@
         <div class = "row">
           <div class = "col-md-4 col-sm-6 col-xs-12">
             <div class = "form-group">
-              <label>Date of birth</label>
+              <label>{{Content.emps.dob}}</label>
               <input type = "text" class = "date-input-value-copy" ng-model = "view.obj.dob">
               <div class = "input-group">
                 <input type = "text" class = "form-control" readonly
-                  ng-value = "view.obj.dob | date : 'MMMM d, yyyy' : 'UTC'"
+                  ng-value = "view.obj.dob | date : Content.datefmt : 'UTC'"
                   ag-init = "$scope.initDatePicker($element, $element.parent().prev())">
                 <div class = "input-group-addon"><span class = "btn btn-icon"><i class = "fa fa-calendar-o"></i></span></div>
               </div>
@@ -74,16 +74,16 @@
 
           <div ag-trim class = "col-md-8 col-sm-6 col-xs-12">
             <div class = "form-group">
-              <label>Sex</label>
+              <label>{{Content.emps.sex}}</label>
               <div class = "cell-bottom" ag-init = "$scope.matchHeight($element,
                 $element.parent().parent().prev().find('.form-control'))">
 
                 <span class = "checkbox checkbox-inline" ng-click = "view.obj.sex = (view.obj.sex == 'M')?(null):('M')">
-                  <input type = "checkbox" ng-checked = "view.obj.sex == 'M'"><label>Male</label>
+                  <input type = "checkbox" ng-checked = "view.obj.sex == 'M'"><label>{{Content.emps.male}}</label>
                 </span>
 
                 <span class = "checkbox checkbox-inline" ng-click = "view.obj.sex = (view.obj.sex == 'F')?(null):('F')">
-                  <input type = "checkbox" ng-checked = "view.obj.sex == 'F'"><label>Female</label>
+                  <input type = "checkbox" ng-checked = "view.obj.sex == 'F'"><label>{{Content.emps.female}}</label>
                 </span>
               </div>
             </div>
@@ -93,14 +93,14 @@
         <div class = "row">
           <div class = "col-sm-6 col-xs-12">
             <div class = "form-group">
-              <label>Personal email</label>
+              <label>{{Content.emps.pmail}}</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.email">
             </div>
           </div>
 
           <div class = "col-sm-6 col-xs-12">
             <div class = "form-group">
-              <label>Personal phone</label>
+              <label>{{Content.emps.pphone}}</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.phone">
             </div>
           </div>
@@ -109,7 +109,7 @@
         <div class = "row">
           <div class = "col-xs-12">
             <div class = "form-group">
-              <label>Home address</label>
+              <label>{{Content.emps.home}}</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.address">
             </div>
           </div>
@@ -118,18 +118,18 @@
         <div class = "row">
           <div class = "col-md-8 col-sm-6 col-xs-12">
             <div class = "form-group">
-              <label>Works in department</label>
+              <label>{{Content.emps.dep}}</label>
               <input type = "text" class = "form-control" readonly ng-value = "depName(view.obj)">
             </div>
           </div>
 
           <div class = "col-md-4 col-sm-6 col-xs-12">
             <div class = "form-group">
-              <label>Since</label>
+              <label>{{Content.emps.depsince}}</label>
               <input type = "text" class = "date-input-value-copy" ng-model = "view.obj.employee.hired">
               <div class = "input-group">
                 <input type = "text" class = "form-control" readonly
-                  ng-value = "view.obj.employee.hired | date : 'MMMM d, yyyy' : 'UTC'"
+                  ng-value = "view.obj.employee.hired | date : Content.datefmt : 'UTC'"
                   ag-init = "$scope.initDatePicker($element, $element.parent().prev())">
                 <div class = "input-group-addon"><span class = "btn btn-icon"><i class = "fa fa-calendar-o"></i></span></div>
               </div>
@@ -140,14 +140,14 @@
         <div class = "row">
           <div class = "col-sm-6 col-xs-12">
             <div class = "form-group">
-              <label>Work email</label>
+              <label>{{Content.emps.wmail}}</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.employee.email">
             </div>
           </div>
 
           <div class = "col-sm-6 col-xs-12">
             <div class = "form-group">
-              <label>Work phone</label>
+              <label>{{Content.emps.wphone}}</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.employee.phone">
             </div>
           </div>
@@ -156,15 +156,15 @@
         <div ag-trim class = "buttons">
           <div class = "left">
             <button ng-click = "view.obj = view.seldep = null"
-              class = "btn btn-default">Close</button>
-            <button class = "btn btn-info" ng-click = "gotoDep(e)">View department</button>
+              class = "btn btn-default">{{Content.emps.close}}</button>
+            <button class = "btn btn-info" ng-click = "gotoDep(e)">{{Content.emps.viewdep}}</button>
           </div>
 
           <div class = "right">
             <button ng-click = "view.seldep = (view.seldep == e.uuid)?(null):(e.uuid)"
-              class = "btn btn-warning">Select department</button>
+              class = "btn btn-warning">{{Content.emps.seldep}}</button>
             <button class = "btn btn-success" ng-click = "submitEmp()"
-              ng-disabled = "NU != view.obj.uuid && ZeT.deepEquals(view.obj, e)">Commit</button>
+              ng-disabled = "NU != view.obj.uuid && ZeT.deepEquals(view.obj, e)">{{Content.emps.commit}}</button>
           </div>
         </div>
       </form>

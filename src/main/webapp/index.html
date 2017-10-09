@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app = "main" lang = "ru">
+<html ng-app = "main">
 <head>
   <meta charset = "utf-8"/>
   <meta http-equiv = "Content-Type" content = "text/html;charset=UTF-8"/>
@@ -18,7 +18,7 @@
 
   <title></title> <!-- Content.title -->
 </head>
-<body lang = "en" ng-controller = "root" class = "{{win.target}}"
+<body lang = "{{Content.iso}}" ng-controller = "root" class = "{{win.target}}"
   ag-class = "{'menu-expand': '~menu-expanded', pulsing: 'pulsing=1000'}">
 
   <ng-include src = "'pages/menu.html'"

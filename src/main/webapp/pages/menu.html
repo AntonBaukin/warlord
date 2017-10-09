@@ -6,18 +6,18 @@
 
   <ul ag-trim>
     <i class = "warlord-logo" ag-click = "content-hide content-main pulsing+100"
-      ag-opts = "{up:99}"><span>WAR</span><span>Lord</span><span>Skeleton</span></i>
+      ag-opts = "{up:99}" ng-bind-html = "Content.menu.warlord"></i>
 
     <li class = "menu" ag-click = "content-hide content-departments pulsing+100"
       ag-opts = "{up:99}" ag-class = "{'content-hide': '!active', 'content-departments': 'active'}">
       <span ag-on = "win-retarget" ag-on-win-retarget = "$scope.fixWidth($element, 100)"
-        ag-init = "$scope.fixWidth($element, 1000)">Departments</span>
+        ag-init = "$scope.fixWidth($element, 1000)">{{Content.menu.deps}}</span>
     </li>
 
     <li class = "menu" ag-click = "content-hide content-employees pulsing+100"
       ag-opts = "{up:99}" ag-class = "{'content-hide': '!active', 'content-employees': 'active'}">
       <span ag-on = "win-retarget" ag-on-win-retarget = "$scope.fixWidth($element, 100)"
-        ag-init = "$scope.fixWidth($element, 1000)">Employees</span>
+        ag-init = "$scope.fixWidth($element, 1000)">{{Content.menu.emps}}</span>
     </li>
 
     <i class = "menu-bars hidden" ag-click = "toggle-content-menu pulsing+100"

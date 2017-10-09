@@ -13,7 +13,7 @@
       <div class = "buttons">
         <div class = "right">
           <btn ng-click = "view.obj = deps[NU]"
-            class = "btn btn-warning">Add department</btn>
+            class = "btn btn-warning">{{Content.deps.add}}</btn>
         </div>
       </div>
     </div>
@@ -33,22 +33,22 @@
 
       <form class = "expanded block" ng-if = "view.obj.uuid == d.uuid">
         <div class = "form-group name">
-          <label>Department name</label>
+          <label>{{Content.deps.name}}</label>
           <input type = "text" class = "form-control" ng-model = "view.obj.name"
-            placeholder = "Set department name that is required…">
+            placeholder = "{{Content.deps.nameplace}}">
         </div>
 
         <div class = "row">
           <div class = "col-sm-6 col-xs-12">
             <div class = "form-group">
-              <label>Office</label>
+              <label>{{Content.deps.office}}</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.office">
             </div>
           </div>
 
           <div class = "col-sm-6 col-xs-12">
             <div class = "form-group">
-              <label>Phone</label>
+              <label>{{Content.deps.phone}}</label>
               <input type = "text" class = "form-control" ng-model = "view.obj.phone">
             </div>
           </div>
@@ -57,18 +57,18 @@
         <div class = "row" ng-if = "NU != view.obj.uuid">
           <div class = "col-md-8 col-sm-6 col-xs-12">
             <div class = "form-group">
-              <label>Head</label>
+              <label>{{Content.deps.head}}</label>
               <input type = "text" class = "form-control" readonly ng-value = "headName(view.obj)">
             </div>
           </div>
 
           <div class = "col-md-4 col-sm-6 col-xs-12" ng-if = "NU != view.obj.uuid">
             <div class = "form-group">
-              <label>Since</label>
+              <label>{{Content.deps.since}}</label>
               <input type = "text" class = "date-input-value-copy" ng-model = "view.obj.head.since">
               <div class = "input-group">
                 <input type = "text" class = "form-control" readonly
-                  ng-value = "view.obj.head.since | date : 'MMMM d, yyyy' : 'UTC'"
+                  ng-value = "view.obj.head.since | date : Content.datefmt : 'UTC'"
                   ag-init = "$scope.initDatePicker($element, $element.parent().prev())">
                 <div class = "input-group-addon"><span class = "btn btn-icon"><i class = "fa fa-calendar-o"></i></span></div>
               </div>
@@ -79,19 +79,19 @@
         <div ag-trim class = "buttons">
           <div class = "left">
             <button ng-click = "view.obj = view.emps = view.selhead = null"
-              class = "btn btn-default">Close</button>
+              class = "btn btn-default">{{Content.deps.close}}</button>
 
             <button ng-click = "view.emps = (view.emps == d.uuid)?(null):(d.uuid); view.selhead = null"
-              class = "btn btn-info" ng-if = "NU != view.obj.uuid">View employees</button>
+              class = "btn btn-info" ng-if = "NU != view.obj.uuid">{{Content.deps.viewemps}}</button>
           </div>
 
           <div class = "right">
             <button ng-click = "view.emps = (view.selhead == d.uuid)?(null):(d.uuid);
               view.selhead = (view.selhead == d.uuid)?(null):(d.uuid)"
-              class = "btn btn-warning" ng-if = "NU != view.obj.uuid">Select head</button>
+              class = "btn btn-warning" ng-if = "NU != view.obj.uuid">{{Content.deps.selhead}}</button>
 
             <button class = "btn btn-success" ng-click = "submitDep()"
-              ng-disabled = "NU != view.obj.uuid && ZeT.deepEquals(view.obj, d)">Commit</button>
+              ng-disabled = "NU != view.obj.uuid && ZeT.deepEquals(view.obj, d)">{{Content.deps.commit}}</button>
           </div>
         </div>
       </form>
