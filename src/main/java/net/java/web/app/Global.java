@@ -19,7 +19,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.util.UrlPathHelper;
 
 /* Warlord */
 
@@ -69,9 +71,13 @@ public class Global extends WebMvcConfigurerAdapter
 	@CallMe("setTxFilter")
 	public TxFilter txFilter;
 
+	private static String[] DISP = new String[] {
+	  "/get/", "/update/", "/save/"
+	};
+
 	private void setTxFilter(TxFilter tx)
 	{
-		tx.setContexts("/get/", "/update/", "/save/");
+		tx.setContexts(DISP);
 	}
 
 	/**
@@ -87,9 +93,11 @@ public class Global extends WebMvcConfigurerAdapter
 		ServletRegistration.Dynamic ds = Req.context().
 		  addServlet("Spring Dispatcher Servlet", dispatcher);
 
-		//~: map it under the root
+		//~: map it under the dispatched roots
+		for(String d : DISP) ds.addMapping(d + "*");
+
+		//~: initialize the servlet now
 		ds.setLoadOnStartup(1);
-		ds.addMapping("/*");
 	}
 
 	@Autowired
@@ -135,5 +143,15 @@ public class Global extends WebMvcConfigurerAdapter
 	{
 		cs.clear(); //<-- don't use the default
 		cs.add(new MappedMessageConverter());
+	}
+
+	public void configurePathMatch(PathMatchConfigurer c)
+	{
+		//HINT: we use full path matching as we have
+		// several dispatcher mappings: '/get/', '/set/'...
+
+		UrlPathHelper uph = new UrlPathHelper();
+		uph.setAlwaysUseFullPath(true);
+		c.setUrlPathHelper(uph);
 	}
 }

@@ -67,6 +67,8 @@ public class FilterCycle
 
 	protected Filter terminal;
 
+	protected boolean terminalInvoked;
+
 	public void setTerminal(Filter terminal)
 	{
 		this.terminal = terminal;
@@ -131,17 +133,14 @@ public class FilterCycle
 
 		Filter terminal = getTerminal();
 
-		//?: {have no terminal}
-		if(terminal == null)
-			return;
-
-		//?: {current scope is not the tail}
-		if(s.last + 1 <= filters.length)
+		//?: {have no terminal | done it}
+		if(terminal == null || terminalInvoked)
 			return;
 
 		//~: invoke the terminal filter
 		try
 		{
+			terminalInvoked = true;
 			terminal.openFilter(task);
 		}
 		catch(Throwable e)

@@ -82,7 +82,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		else
 		{
 			delete globalData[u] //<-- delete obsolete data
-			r = false //<-- mark as no call
+			r = true //<-- mark as to call on reload
 		}
 
 		//~: (always) load the requested data
@@ -99,7 +99,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			replaceData(obj)
 
 			//?: {call the functor now}
-			if(!r) f.call(this, obj)
+			if(r) f.call(this, obj)
 		})
 	}
 
@@ -514,6 +514,23 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		return ZeT.extend(res, objs)
 	}
 
+	/**
+	 * Tells whether the given objects mapping
+	 * has no objects, or only NULL-one.
+	 */
+	function isEmptyObjs(objs)
+	{
+		ZeT.assert(ZeT.isox(objs))
+		var keys = ZeT.keys(objs)
+
+		//?: {has no objects at all}
+		if(!keys.length) return true
+
+		//?: {has only null-object}
+		if(keys.length == 1 && keys[0] == NU)
+			return true
+	}
+
 	//~: departments controller
 	main.controller('depsCtrl', function($scope, $element)
 	{
@@ -530,7 +547,11 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 				{
 					$scope.deps = insertNullObject(deps)
 					$scope.safeApply()
-					$scope.gotoIfDelayed()
+
+					if(isEmptyObjs(deps)) //?: {has no data}
+						$scope.$broadcast('show-content-menu')
+					else
+						$scope.gotoIfDelayed()
 				})
 			})
 		})
@@ -628,7 +649,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		})
 
 		//~: load the data
-		$scope.$on('content-departments', $scope.initScope = function()
+		$scope.$on('content-employees', $scope.initScope = function()
 		{
 			loadData('/get/employees', function(emps)
 			{
@@ -637,6 +658,11 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 					$scope.deps = deps
 					$scope.emps = insertNullObject(emps)
 					$scope.safeApply()
+
+					if(isEmptyObjs(emps)) //?: {has no data}
+						$scope.$broadcast('show-content-menu')
+					else
+						$scope.gotoIfDelayed()
 				})
 			})
 		})

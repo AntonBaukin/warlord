@@ -15,6 +15,10 @@ var AppData = ZeT.singleInstance('App:Data:Proxy',
 		//?: {parameters is uuid}
 		if(ZeT.iss(ps)) ps = { uuid: ps }
 
+		//?: {tries global server path}
+		if(ZeTS.starts(url, '/'))
+			url = url.substring(1)
+
 		ZeT.assert(!ZeT.ises(url) && ZeT.isf(f))
 		ZeT.assert(ZeT.isx(ps) || ZeT.isox(ps))
 
@@ -45,10 +49,14 @@ var AppData = ZeT.singleInstance('App:Data:Proxy',
 	{
 		ZeT.assert(!ZeT.ises(url) && ZeT.isox(obj) && ZeT.isf(f))
 
+		//?: {tries global server path}
+		if(ZeTS.starts(url, '/'))
+			url = url.substring(1)
+
 		var x = { //<-- the request
 			url         : url,
 			type        : 'POST',
-			data        : ZeT.o2s(o), //<-- encode the post payload
+			data        : ZeT.o2s(obj), //<-- encode the post payload
 			contentType : 'application/json;charset=utf-8'
 		}
 
