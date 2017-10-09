@@ -21,6 +21,7 @@ import net.java.web.warlord.EX;
  *
  * @author anton.baukin@gmail.com
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class MapBuilder implements Mapped
 {
 	/**
