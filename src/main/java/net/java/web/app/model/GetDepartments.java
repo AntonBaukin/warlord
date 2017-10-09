@@ -2,6 +2,7 @@ package net.java.web.app.model;
 
 /* Java */
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -116,7 +117,7 @@ public class GetDepartments
 	 * the Department. Employee is not required to
 	 * work in this Department.
 	 */
-	public void setHead(String dep, String emp)
+	public void setHead(String dep, String emp, Date since)
 	{
 		EX.assertu(dep);
 
@@ -139,7 +140,8 @@ public class GetDepartments
 		h.setEmployee(emp);
 
 		//=: since this date
-		h.setSince(new java.util.Date());
+		if(since == null) since = new Date();
+		h.setSince(since);
 
 		//~: create new object record
 		Map<String, Object> m = getObjects.saveMap(emp, h);

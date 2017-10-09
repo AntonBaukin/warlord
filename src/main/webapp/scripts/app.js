@@ -311,7 +311,6 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 		 * Makes the node height patch the reference's.
 		 * If reference is false, resets the height.
 		 * Optional scale factor may be given.
-		 *
 		 */
 		$scope.matchHeight = function(n, ref, scale)
 		{
@@ -396,7 +395,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 			hidden.on('dp.change', function(e)
 			{
 				//~: trigger hidden field to update bound model
-				hidden.val((!e.date)?(''):utc(e.date).toDate().toISOString()).
+				hidden.val((!e.date)?(''):utc(e.date).toISOString()).
 				  trigger('change') //<-- updates the model
 			})
 		}
@@ -637,7 +636,7 @@ ZeT.scope(angular.module('main', $MODULES), function(main)
 
 			//?: {has no date field}
 			if(ZeT.ises(v.obj.head.since))
-				v.obj.head.since = utc(moment()).toDate().toISOString()
+				v.obj.head.since = utc(moment()).toISOString()
 		}
 	})
 

@@ -2,10 +2,12 @@ package net.java.web.app.web;
 
 /* Java */
 
+import java.util.Date;
 import java.util.Map;
 
 /* Spring Framework */
 
+import net.java.web.app.model.DU;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,6 +71,8 @@ public class WebDepartments
 
 	/**
 	 * Updates existing Department and returns it back.
+	 * Supports updating the head with nested 'head'
+	 * document as of {@link #head(Map)}.
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/update/department",
@@ -76,6 +80,14 @@ public class WebDepartments
 	public Object update(@RequestBody Map<String, Object> m)
 	{
 		getDeps.update(OU.unmap(Department.class, m));
+
+		//?: {has nested head document}
+		if(m.containsKey("head"))
+		{
+			OU.map(m.get("head")).put("uuid", m.get("uuid"));
+			return this.head(OU.map(m.get("head")));
+		}
+
 		return this.get((String) m.get("uuid"));
 	}
 
@@ -93,9 +105,11 @@ public class WebDepartments
 	  method = RequestMethod.POST)
 	public Object head(@RequestBody Map<String, Object> m)
 	{
-		getDeps.setHead((String) m.get("uuid"),
-		  (String) m.get("employee"));
+		String u = (String) m.get("uuid");
+		String e = (String) m.get("employee");
+		Date   d = DU.s2d((String) m.get("since"));
 
+		getDeps.setHead(u, e, d);
 		return this.get((String) m.get("uuid"));
 	}
 
