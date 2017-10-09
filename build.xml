@@ -1,6 +1,6 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 
-<project name = "WARLord" default = "init-ivy"
+<project name = "WARLord" default = "package"
   xmlns:ivy = "antlib:org.apache.ivy.ant">
 
 
@@ -10,13 +10,25 @@
             value = "0.0.1"/>
 
   <property name  = "archive"
-            value = "warlord.jar"/>
+            value = "warlord.war"/>
 
   <property name  = "build-root"
             value = "${basedir}/build"/>
 
+  <property name  = "sources-root"
+            value = "${basedir}/src/main/java"/>
+
+  <property name  = "resources-root"
+            value = "${basedir}/src/main/resources"/>
+
+  <property name  = "webapp-root"
+            value = "${basedir}/src/main/webapp"/>
+
   <property name  = "target-root"
-            value = "${basedir}/target/"/>
+            value = "${basedir}/target"/>
+
+  <property name  = "target-classes"
+            value = "${target-root}/classes"/>
 
   <property name  = "ivy-cache"
             value = "${build-root}/.ivy-cache"/>
@@ -105,6 +117,8 @@
   </condition>
 
 
+  <!-- ====[ § Apache Ivy Dependencies ]==== -->
+
   <!-- § init ivy -->
 
   <target name = "init-ivy" unless = "?init-ivy-actual">
@@ -171,6 +185,79 @@
   </target>
 
 
+  <!-- ====[ § Compile and Package ]==== -->
+
+  <path id = "main-classpath">
+    <fileset dir = "${libs-compile}"   includes = "*.jar"/>
+    <fileset dir = "${libs-provided}"  includes = "*.jar"/>
+  </path>
+
+
+  <!-- § compile -->
+
+  <target name = "compile" depends = "init-ivy">
+
+    <mkdir dir = "${target-classes}"/>
+
+    <javac srcdir = "${sources-root}"
+      destdir  = "${target-classes}"
+      debug    = "${?debug}"
+      encoding = "${compile.encoding}"
+      source   = "${compile.version}"
+      target   = "${compile.version}"
+      includeAntRuntime = "false">
+
+      <classpath refid = "main-classpath"/>
+    </javac>
+
+    <sync todir = "${target-classes}"
+      overwrite = "true" includeEmptyDirs = "true">
+
+      <!-- copy resources messed with java classes -->
+      <fileset dir = "${sources-root}">
+        <exclude name = "**/*.java"/>
+      </fileset>
+
+      <!-- copy separated resources -->
+      <fileset dir = "${resources-root}"/>
+
+      <preserveintarget>
+        <include name = "**/*.class"/>
+      </preserveintarget>
+    </sync>
+  </target>
+
+
+  <!-- § package -->
+
+  <target name = "package" depends = "compile">
+
+    <jar destfile = "${target-root}/${archive}"
+      basedir  = "${webapp-root}"
+      encoding = "${compile.encoding}"
+      compress = "false">
+
+      <!-- copy the compiled classes and resources -->
+      <zipfileset prefix = "WEB-INF/classes"
+        dir = "${target-classes}"/>
+
+      <!-- copy the compile libraries -->
+      <zipfileset prefix = "WEB-INF/lib"
+        dir = "${libs-compile}"/>
+
+      <!-- copy the runtime libraries -->
+      <zipfileset prefix = "WEB-INF/lib"
+        dir = "${libs-runtime}"/>
+    </jar>
+  </target>
+
+
+  <!-- ====[ § Test Tomcat Installation ]==== -->
+
+
+
+
+
   <!-- ====[ § Styles and Scripts via Node.js Utilities ]==== -->
 
   <!--
@@ -219,4 +306,27 @@
     <move file = "src/styles/app.css" todir = "src/main/webapp"/>
   </target>
 
+
+  <!-- ====[ § Miscellaneous Utilities ]==== -->
+
+  <!-- § start test tomcat server -->
+
+  <target name = "test-start" depends = "package, tomcat-install">
+
+    <copy todir = "${tomcat-target}/webapps"
+      file = "${target-root}/${archive}"/>
+
+    <antcall target = "tomcat-start"/>
+  </target>
+
+
+  <!-- § clean the project -->
+
+  <target name = "clean">
+    <delete dir = "${target-root}"/>
+  </target>
+
+  <target name = "clean-all" depends = "clean">
+    <delete dir = "${ivy-cache}"/>
+  </target>
 </project>
